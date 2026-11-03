@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infusion Pump Repair Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header>
+  <div class="bar">
+    <div class="logo">IP</div>
+    <div class="brand">Infusion Pump Repair Trainer<small>สื่อฝึกซ่อมเครื่องควบคุมการให้สารละลาย · ครบ 6 โมดูล</small></div>
+  </div>
+  <nav id="nav">
+    <a href="#home" data-v="home">หน้าแรก</a>
+    <a href="#principle" data-v="principle">1 · หลักการทำงาน</a>
+    <a href="#alarms" data-v="alarms">2 · รหัส Alarm</a>
+    <a href="#repair" data-v="repair">3 · จำลองการซ่อม</a>
+    <a href="#pm" data-v="pm">4 · ทดสอบ/PM</a>
+    <a href="#order" data-v="order">5 · ลำดับขั้นตอน</a>
+    <a href="#quiz" data-v="quiz">6 · แบบทดสอบ</a>
+    <a href="#scores" data-v="scores">ผลของฉัน</a>
+  </nav>
+</header>
+
+<main>
+<!-- HOME -->
+<section class="view" id="v-home">
+  <h1>ฝึกวิเคราะห์และซ่อม Volumetric Infusion Pump</h1>
+  <p class="muted">เครื่องในแอปนี้เป็น <b>เครื่องจำลองทั่วไป</b> ไม่ได้อิงยี่ห้อหรือรุ่นใด สร้างจากหลักการทำงานร่วมของ volumetric pump แบบ linear peristaltic ที่ใช้ในโรงพยาบาลทั่วไป</p>
+  <div class="cards">
+    <a class="card" href="#principle"><div class="num">โมดูล 1</div><h3>หลักการทำงาน</h3><p>แตะชิ้นส่วนบนภาพตัดภายในเครื่องหรือ block diagram เพื่อดูหน้าที่ อาการเสียที่พบบ่อย และวิธีตรวจ</p></a>
+    <a class="card" href="#alarms"><div class="num">โมดูล 2</div><h3>รหัส Alarm</h3><p>alarm ที่พบบ่อย 15 รายการ แยกสาเหตุจากผู้ใช้กับสาเหตุทางเทคนิค พร้อมลำดับการตรวจ</p></a>
+    <a class="card" href="#repair"><div class="num">โมดูล 3</div><h3>จำลองการซ่อม</h3><p>8 เคสจากใบแจ้งซ่อม ตรวจหาสาเหตุ วินิจฉัย เลือกวิธีซ่อม และทดสอบก่อนส่งคืน พร้อมคะแนนและเฉลย</p></a>
+    <a class="card" href="#pm"><div class="num">โมดูล 4</div><h3>การทดสอบหลังซ่อม / PM</h3><p>Flow accuracy, occlusion pressure, air detection, electrical safety (IEC 62353) พร้อมเครื่องคำนวณ โจทย์ฝึกตัดสินผล และแบบบันทึกผล</p></a>
+    <a class="card" href="#order"><div class="num">โมดูล 5</div><h3>ลำดับขั้นตอน</h3><p>แตะเรียงขั้นตอนงานซ่อม การเปลี่ยนแบต และการเปิดเครื่องทำความสะอาด พร้อมเหตุผลของแต่ละขั้น</p></a>
+    <a class="card" href="#quiz"><div class="num">โมดูล 6</div><h3>แบบทดสอบ</h3><p>สุ่ม 20 ข้อจากคลัง 30 ข้อ ส่งแล้วเห็นคะแนนแยกหมวดพร้อมเฉลย</p></a>
+  </div>
+  <div class="note"><b>ข้อควรทราบ:</b> สื่อนี้ใช้เพื่อการเรียนการสอนเท่านั้น ค่าตัวเลขและเกณฑ์เป็นค่าโดยทั่วไป การซ่อมเครื่องจริงต้องทำตาม service manual ของผู้ผลิตรุ่นนั้น โดยช่างที่ผ่านการอบรม และต้องทดสอบความปลอดภัยทุกครั้งก่อนนำเครื่องกลับไปใช้กับผู้ป่วย</div>
+</section>
+
+<!-- PRINCIPLE -->
+<section class="view" id="v-principle">
+  <h1>หลักการทำงาน</h1>
+  <p class="muted">แตะชิ้นส่วนบนภาพเพื่อดูรายละเอียด กด “เดินเครื่อง” เพื่อดูการทำงานของกลไก peristaltic หรือเลือก “เส้นทางสัญญาณ” เพื่อดูว่าคำสั่งและสัญญาณวิ่งไปทางไหนบ้าง</p>
+  <div class="tools">
+    <div class="seg"><button id="bt-cut" class="on">ภาพตัดภายใน</button><button id="bt-blk">Block diagram</button><button id="bt-flow">เส้นทางสัญญาณ</button></div>
+    <button id="bt-run">▶ เดินเครื่อง</button>
+  </div>
+  <div class="layout">
+    <div>
+      <figure id="fig-cut">
+        <svg class="dia" id="svg-cut" viewBox="0 0 360 610" role="img" aria-label="ภาพตัดภายในของ volumetric infusion pump จำลอง แสดงเส้นทางสายให้สารละลายผ่าน drop sensor, upstream occlusion sensor, กลไก peristaltic, downstream occlusion sensor และ air-in-line detector">
+          <!-- drip chamber + drop sensor (outside casing) -->
+          <text class="lbl s" x="100" y="12" text-anchor="middle">จากถุงสารละลาย</text>
+          <line class="tube" x1="100" y1="18" x2="100" y2="30"/>
+          <g class="part" data-id="dropsensor">
+            <rect class="hit" x="52" y="26" width="96" height="76" rx="8"/>
+            <rect class="st" x="86" y="30" width="28" height="58" rx="6" stroke-width="1.5"/>
+            <rect x="88" y="70" width="24" height="16" rx="3" fill="var(--tube)" opacity=".45"/>
+            <circle class="drop" cx="100" cy="42" r="3" fill="var(--tube)"/>
+            <rect x="66" y="48" width="14" height="22" rx="3" fill="var(--accent)"/>
+            <rect x="120" y="48" width="14" height="22" rx="3" fill="var(--accent)"/>
+            <line x1="80" y1="59" x2="120" y2="59" stroke="var(--hi)" stroke-width="1" stroke-dasharray="2 2"/>
+            <text class="lbl" x="152" y="56">Drop sensor</text>
+            <text class="lbl s" x="152" y="69">IR LED / photodetector</text>
+          </g>
+          <line class="tube" x1="100" y1="88" x2="100" y2="590"/>
+          <line class="flow" x1="100" y1="88" x2="100" y2="590"/>
+
+          <!-- casing -->
+          <rect class="st" x="14" y="112" width="332" height="470" rx="18" stroke-width="2"/>
+          <text class="lbl s" x="334" y="129" text-anchor="end">ตัวเครื่อง (ด้านหน้าเปิดฝาออก)</text>
+
+          <!-- door / platen -->
+          <g class="part" data-id="door">
+            <rect class="hit" x="26" y="136" width="44" height="380" rx="6"/>
+            <rect x="52" y="140" width="16" height="370" rx="4" class="fill-soft" stroke="currentColor" stroke-width="1"/>
+            <rect x="30" y="150" width="14" height="18" rx="3" fill="var(--mid)"/>
+            <text class="lbl s" x="37" y="186" text-anchor="middle" transform="rotate(-90 37 186)">magnet</text>
+            <text class="lbl" x="40" y="340" text-anchor="middle" transform="rotate(-90 40 340)">ฝาประตู / Platen</text>
+          </g>
+
+          <!-- upstream occlusion -->
+          <g class="part" data-id="occ_up">
+            <rect class="hit" x="76" y="140" width="110" height="40" rx="6"/>
+            <rect x="104" y="148" width="16" height="24" rx="4" fill="var(--low)"/>
+            <text class="lbl" x="124" y="158">Upstream</text>
+            <text class="lbl s" x="124" y="171">occlusion sensor</text>
+          </g>
+
+          <!-- peristaltic fingers + camshaft -->
+          <g class="part" data-id="fingers">
+            <rect class="hit" x="76" y="190" width="110" height="160" rx="6"/>
+            <g>
+              <rect class="finger" x="106" y="196" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:0s"/>
+              <rect class="finger" x="106" y="214" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:.18s"/>
+              <rect class="finger" x="106" y="232" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:.36s"/>
+              <rect class="finger" x="106" y="250" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:.54s"/>
+              <rect class="finger" x="106" y="268" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:.72s"/>
+              <rect class="finger" x="106" y="286" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:.9s"/>
+              <rect class="finger" x="106" y="304" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:1.08s"/>
+              <rect class="finger" x="106" y="322" width="40" height="14" rx="2" fill="currentColor" opacity=".75" style="animation-delay:1.26s"/>
+            </g>
+            <rect x="150" y="194" width="16" height="144" rx="4" class="fill-card" stroke="currentColor" stroke-width="1.2"/>
+            <text class="lbl s" x="158" y="270" text-anchor="middle" transform="rotate(-90 158 270)">camshaft</text>
+            <text class="lbl" x="172" y="204"></text>
+          </g>
+
+          <!-- motor -->
+          <g class="part" data-id="motor">
+            <rect class="hit" x="122" y="350" width="70" height="56" rx="6"/>
+            <line x1="158" y1="338" x2="158" y2="360" stroke="currentColor" stroke-width="3"/>
+            <rect x="134" y="360" width="48" height="34" rx="5" fill="currentColor" opacity=".18" stroke="currentColor"/>
+            <circle cx="158" cy="377" r="9" class="st"/>
+            <text class="lbl s" x="158" y="404" text-anchor="middle">Stepper + Encoder</text>
+          </g>
+
+          <!-- downstream occlusion -->
+          <g class="part" data-id="occ_down">
+            <rect class="hit" x="76" y="412" width="110" height="40" rx="6"/>
+            <rect x="104" y="420" width="16" height="24" rx="4" fill="var(--low)"/>
+            <text class="lbl" x="124" y="430">Downstream</text>
+            <text class="lbl s" x="124" y="443">occlusion sensor</text>
+          </g>
+
+          <!-- air in line -->
+          <g class="part" data-id="air">
+            <rect class="hit" x="76" y="460" width="110" height="46" rx="6"/>
+            <rect x="80" y="468" width="12" height="30" rx="3" fill="var(--hi)"/>
+            <rect x="108" y="468" width="12" height="30" rx="3" fill="var(--hi)"/>
+            <path d="M92 476 q4 3 0 6 q-4 3 0 6 q4 3 0 6" class="st" stroke-width="1"/>
+            <text class="lbl" x="126" y="479">Air-in-line</text>
+            <text class="lbl s" x="126" y="492">ultrasonic</text>
+          </g>
+
+          <!-- right column: UI & electronics -->
+          <g class="part" data-id="display">
+            <rect class="hit" x="200" y="138" width="134" height="62" rx="6"/>
+            <rect x="206" y="144" width="122" height="50" rx="5" fill="currentColor" opacity=".9"/>
+            <text x="214" y="162" font-size="10" fill="var(--bg)">RATE 125 mL/h</text>
+            <text x="214" y="178" font-size="10" fill="var(--bg)">VTBI 500 mL</text>
+          </g>
+          <g class="part" data-id="keypad">
+            <rect class="hit" x="200" y="206" width="134" height="62" rx="6"/>
+            <g fill="var(--line)" stroke="currentColor" stroke-width=".6">
+              <rect x="208" y="212" width="34" height="14" rx="3"/><rect x="250" y="212" width="34" height="14" rx="3"/><rect x="292" y="212" width="34" height="14" rx="3"/>
+              <rect x="208" y="230" width="34" height="14" rx="3"/><rect x="250" y="230" width="34" height="14" rx="3"/><rect x="292" y="230" width="34" height="14" rx="3"/>
+              <rect x="208" y="248" width="34" height="14" rx="3"/><rect x="250" y="248" width="34" height="14" rx="3"/><rect x="292" y="248" width="34" height="14" rx="3"/>
+            </g>
+          </g>
+          <g class="part" data-id="mcu">
+            <rect class="hit" x="200" y="280" width="134" height="84" rx="6"/>
+            <rect x="206" y="286" width="122" height="72" rx="5" fill="var(--accent)" opacity=".2" stroke="var(--accent)"/>
+            <rect x="244" y="300" width="44" height="30" rx="3" fill="currentColor" opacity=".8"/>
+            <text x="266" y="319" font-size="10" text-anchor="middle" fill="var(--bg)">MCU</text>
+            <text class="lbl s" x="267" y="348" text-anchor="middle">Main board + motor driver</text>
+          </g>
+          <g class="part" data-id="battery">
+            <rect class="hit" x="200" y="376" width="134" height="50" rx="6"/>
+            <rect x="210" y="384" width="104" height="32" rx="4" class="st" stroke-width="1.5"/>
+            <rect x="314" y="393" width="6" height="14" rx="1" fill="currentColor"/>
+            <rect x="214" y="388" width="64" height="24" rx="2" fill="var(--accent)" opacity=".6"/>
+            <text class="lbl" x="262" y="404" text-anchor="middle">Battery</text>
+          </g>
+          <g class="part" data-id="psu">
+            <rect class="hit" x="200" y="436" width="134" height="50" rx="6"/>
+            <rect x="210" y="442" width="114" height="38" rx="4" fill="var(--line)" stroke="currentColor" stroke-width=".8"/>
+            <text class="lbl" x="267" y="458" text-anchor="middle">Power supply</text>
+            <text class="lbl s" x="267" y="472" text-anchor="middle">AC/DC + charger</text>
+          </g>
+          <g class="part" data-id="buzzer">
+            <rect class="hit" x="200" y="496" width="134" height="50" rx="6"/>
+            <circle cx="226" cy="521" r="14" class="st" stroke-width="1.5"/>
+            <circle cx="226" cy="521" r="5" fill="currentColor"/>
+            <circle cx="262" cy="521" r="6" fill="var(--warn)"/>
+            <circle cx="282" cy="521" r="6" fill="var(--mid)"/>
+            <circle cx="302" cy="521" r="6" fill="var(--accent)"/>
+            <text class="lbl s" x="267" y="542" text-anchor="middle">Buzzer · LED · Nurse call</text>
+          </g>
+
+          <text class="lbl s" x="100" y="604" text-anchor="middle">ไปยังผู้ป่วย ↓</text>
+        </svg>
+        <figcaption>เส้นทางสารละลายไหลจากบนลงล่าง ผ่าน sensor ต้นทาง → กลไกบีบสาย → sensor ปลายทาง ก่อนออกไปยังผู้ป่วย</figcaption>
+      </figure>
+
+      <figure id="fig-blk" style="display:none">
+        <svg class="dia" id="svg-blk" viewBox="0 0 360 470" role="img" aria-label="Block diagram: sensor ทั้งหมดส่งสัญญาณเข้า MCU, MCU สั่ง motor driver, จอ และ buzzer, ภาคจ่ายไฟเลี้ยงทุกส่วน">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+          </defs>
+          <text class="lbl s" x="62" y="16" text-anchor="middle">INPUT</text>
+          <text class="lbl s" x="180" y="16" text-anchor="middle">ควบคุม</text>
+          <text class="lbl s" x="298" y="16" text-anchor="middle">OUTPUT</text>
+          <!-- inputs -->
+          <g id="blk-in"></g>
+          <!-- MCU -->
+          <g class="part" data-id="mcu">
+            <rect class="hit" x="128" y="120" width="104" height="120" rx="10"/>
+            <rect x="132" y="124" width="96" height="112" rx="9" fill="var(--accent)" opacity=".18" stroke="var(--accent)" stroke-width="1.5"/>
+            <text x="180" y="170" font-size="14" font-weight="600" text-anchor="middle" fill="currentColor">MCU</text>
+            <text class="lbl s" x="180" y="187" text-anchor="middle">+ watchdog</text>
+            <text class="lbl s" x="180" y="201" text-anchor="middle">+ EEPROM (cal/log)</text>
+          </g>
+          <g id="blk-out"></g>
+          <!-- power -->
+          <g class="part" data-id="psu">
+            <rect class="hit" x="8" y="388" width="160" height="56" rx="8"/>
+            <rect x="12" y="392" width="152" height="48" rx="7" fill="var(--line)" stroke="currentColor" stroke-width=".8"/>
+            <text class="lbl" x="88" y="413" text-anchor="middle">AC/DC + Charger</text>
+            <text class="lbl s" x="88" y="428" text-anchor="middle">fuse · regulator</text>
+          </g>
+          <g class="part" data-id="battery">
+            <rect class="hit" x="192" y="388" width="160" height="56" rx="8"/>
+            <rect x="196" y="392" width="152" height="48" rx="7" class="st" stroke-width="1.2"/>
+            <text class="lbl" x="272" y="420" text-anchor="middle">Battery</text>
+          </g>
+          <line x1="164" y1="416" x2="194" y2="416" stroke="currentColor" marker-end="url(#ar)"/>
+          <line x1="180" y1="388" x2="180" y2="240" stroke="currentColor" stroke-dasharray="4 3" marker-end="url(#ar)"/>
+          <text class="lbl s" x="186" y="368">ไฟเลี้ยงทุกวงจร</text>
+        </svg>
+        <figcaption>MCU อ่านค่าจาก sensor ทุกตัวตลอดเวลา ถ้าค่าใดผิดปกติจะหยุดมอเตอร์และสั่ง alarm ทันที</figcaption>
+      </figure>
+    </div>
+
+    <aside class="panel" id="panel">
+      <h2>เลือกชิ้นส่วน</h2>
+      <p class="muted">แตะชิ้นส่วนใดก็ได้บนภาพ หรือเลือกจากรายการด้านล่าง</p>
+      <div class="chips" id="chips"></div>
+    </aside>
+  </div>
+  <div id="flow" hidden></div>
+</section>
+
+<!-- REPAIR SIM -->
+<section class="view" id="v-repair"><div id="sim"></div></section>
+<section class="view" id="v-pm"><div id="pm"></div></section>
+<section class="view" id="v-order"><div id="order"></div></section>
+<section class="view" id="v-quiz"><div id="quiz"></div></section>
+<section class="view" id="v-scores"><div id="scores"></div></section>
+
+<!-- ALARMS -->
+<section class="view" id="v-alarms">
+  <h1>รหัส Alarm ที่พบบ่อย</h1>
+  <p class="muted">ชื่อ alarm และรหัสจริงต่างกันไปตามยี่ห้อ ตารางนี้จัดกลุ่มตามความหมาย แตะรายการเพื่อดูสาเหตุและลำดับการตรวจ</p>
+  <input class="search" id="q" type="search" placeholder="ค้นหา เช่น occlusion, แบต, air">
+  <div class="tools" id="pf">
+    <button data-p="all" class="on">ทั้งหมด</button>
+    <button data-p="h">สูง</button>
+    <button data-p="m">กลาง</button>
+    <button data-p="l">ต่ำ</button>
+  </div>
+  <div class="legend"><span><b style="color:var(--warn)">สูง</b> หยุดให้สารละลายทันที</span><span><b style="color:var(--mid)">กลาง</b> ต้องแก้ไขเร็ว</span><span><b style="color:var(--low)">ต่ำ</b> แจ้งเตือน</span></div>
+  <div id="alist"></div>
+  <p class="muted" id="aempty" style="display:none;margin-top:14px">ไม่พบ alarm ที่ตรงกับคำค้น</p>
+</section>
+</main>
+
+<footer>สื่อการสอนวิชาเครื่องมือแพทย์ · เนื้อหาและภาพทั้งหมดจัดทำขึ้นใหม่เพื่อการศึกษา ไม่ได้คัดลอกจากคู่มือของผู้ผลิตรายใด · เครื่องในแอปเป็นเครื่องจำลอง ไม่ใช่ผลิตภัณฑ์จริง</footer>
+
+<script src="data/config.js"></script>
+<script src="data/parts.js"></script>
+<script src="data/alarms.js"></script>
+<script src="data/cases.js"></script>
+<script src="data/learn.js"></script>
+<script src="data/flow.js"></script>
+<script src="js/flow.js"></script>
+<script src="js/app.js"></script>
+<script src="js/learn.js"></script>
+<script src="data/pm.js"></script>
+<script src="data/order.js"></script>
+<script src="data/quiz.js"></script>
+<script src="js/cert.js"></script>
+<script src="js/score.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/pm.js"></script>
+<script src="js/order.js"></script>
+<script src="js/quiz.js"></script>
+</body>
+</html>
