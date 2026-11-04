@@ -40,7 +40,7 @@
         <div class="msg bad" id="a-e" hidden></div>
         <button class="primary wide" type="submit" id="a-go">${mode==="reg"?"ลงทะเบียนและเริ่มเรียน":"เข้าสู่ระบบ"}</button>
       </form>
-      <p class="muted small acenter">${mode==="login"?"ยังไม่มีบัญชี? <a href=\"#\" data-sw=\"reg\">ลงทะเบียน</a> · ลืม PIN ติดต่ออาจารย์ผู้สอนเพื่อตั้งใหม่":"มีบัญชีแล้ว? <a href=\"#\" data-sw=\"login\">เข้าสู่ระบบ</a>"}</p>
+      <p class="muted small acenter">${mode==="login"?"ยังไม่มีบัญชี? <a href=\"#\" data-sw=\"reg\">ลงทะเบียน</a> · ลืม PIN ติดต่อผู้ดูแลระบบเพื่อตั้งใหม่":"มีบัญชีแล้ว? <a href=\"#\" data-sw=\"login\">เข้าสู่ระบบ</a>"}</p>
       ${C.sheetUrl?"":`<p class="msg small">โหมดทดสอบ: ยังไม่ได้เชื่อม Google Sheets บัญชีจะเก็บไว้ในเครื่องนี้เท่านั้น</p>`}
     </div>`;
     g.querySelectorAll(".atabs button,[data-sw]").forEach(b=>b.onclick=e=>{ e.preventDefault(); mode=b.dataset.m||b.dataset.sw; render(g); });
@@ -100,7 +100,7 @@
     let b=document.getElementById("userbox");
     if(!b){ b=document.createElement("div"); b.id="userbox"; bar.appendChild(b); }
     const p=window.Score.profile();
-    b.innerHTML = p ? `<a href="#scores" class="uname" title="ผลของฉัน">👤 ${esc(p.name.split(" ")[0])}</a>` : "";
+    b.innerHTML = p ? `${PORTAL?`<a href="${esc(PORTAL)}my.html" class="uname" title="กลับศูนย์การเรียนรู้">← วิชาของฉัน</a> `:""}<a href="#scores" class="uname" title="ผลของฉัน">👤 ${esc(p.name.split(" ")[0])}</a>` : "";
   }
 
   function signOut(){
@@ -109,10 +109,44 @@
       <div class="tools"><button class="ghost" id="so-n">ยกเลิก</button><button class="primary" id="so-y">ออกจากระบบ</button></div></div>`;
     document.body.appendChild(d);
     d.querySelector("#so-n").onclick=()=>d.remove();
-    d.querySelector("#so-y").onclick=()=>{ d.remove(); window.Score.logout(); userBox(); mode="login"; location.hash="#home"; gate(); };
+    d.querySelector("#so-y").onclick=()=>{ d.remove(); window.Score.logout(); try{ localStorage.removeItem(K_M); }catch(e){} userBox(); if(PORTAL){ location.href=PORTAL; return; } mode="login"; location.hash="#home"; gate(); };
   }
 
-  function init(){ if(window.Score.session()) userBox(); else gate(); }
+  /* ===== เชื่อมกับเว็บหลัก (ศูนย์การเรียนรู้) =====
+     เว็บหลักเก็บ session ร่วมไว้ที่ "mtc-session" ในโดเมนเดียวกัน
+     - มี session ร่วม และลงทะเบียนวิชานี้แล้ว → เข้าแอปได้เลย ไม่ต้องล็อกอินซ้ำ
+     - ยังไม่ได้ล็อกอินหรือยังไม่ลงทะเบียน → ส่งไปหน้าวิชาบนเว็บหลัก
+     ถ้าไม่ได้ตั้ง C.portal แอปจะใช้หน้าล็อกอินของตัวเองเหมือนเดิม */
+  const APP = C.app || "pump", PORTAL = C.portal || "";
+  const K_M = "mtc-session";
+  const portalSess = ()=>{ try{ const m=JSON.parse(localStorage.getItem(K_M)); return m&&m.profile&&m.pin?m:null; }catch(e){ return null; } };
+  const toPortal = page=>{ location.replace(PORTAL + page); };
+
+  function waitBox(msg){
+    let g=document.getElementById("auth");
+    if(!g){ g=document.createElement("div"); g.id="auth"; document.body.appendChild(g); }
+    document.body.classList.add("locked");
+    g.innerHTML=`<div class="abox"><p class="acenter">${esc(msg)}</p></div>`;
+  }
+  async function adopt(m){
+    if(!(m.enrolled||[]).includes(APP)) return toPortal("course.html?c="+APP);
+    waitBox("กำลังเข้าสู่ระบบจากศูนย์การเรียนรู้…");
+    const S=window.Score;
+    if(!C.sheetUrl){ S.setSession({profile:m.profile, pin:m.pin}, []); return enter(); }
+    const r = await S.api("login",{sid:m.profile.sid, pin:m.pin});
+    if(r.ok){ S.setSession({profile:r.profile, pin:m.pin}, r.hist||[]); return enter(); }
+    if(r.err==="net"){ S.setSession({profile:m.profile, pin:m.pin}, null); return enter(); }
+    try{ localStorage.removeItem(K_M); }catch(e){}
+    toPortal("login.html?next="+encodeURIComponent("course.html?c="+APP));
+  }
+
+  function init(){
+    const own = window.Score.session(), m = PORTAL ? portalSess() : null;
+    if(m && (!own || own.profile.sid !== m.profile.sid || own.pin !== m.pin)){ if(own) window.Score.logout(); return adopt(m); }
+    if(own) return userBox();
+    if(PORTAL) return toPortal("course.html?c="+APP);
+    gate();
+  }
   window.Auth={init, signOut};
   document.addEventListener("DOMContentLoaded", init);
 })();
