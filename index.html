@@ -12,7 +12,7 @@
 <header>
   <div class="bar">
     <div class="logo">IP</div>
-    <div class="brand">Infusion Pump Repair Trainer<small>สื่อฝึกซ่อมเครื่องควบคุมการให้สารละลาย · ครบ 6 โมดูล</small></div>
+    <div class="brand">Infusion Pump Repair Trainer<small>สื่อฝึกซ่อมเครื่องควบคุมการให้สารละลาย · 7 โมดูล</small></div>
   </div>
   <nav id="nav">
     <a href="#home" data-v="home">หน้าแรก</a>
@@ -22,6 +22,7 @@
     <a href="#pm" data-v="pm">4 · ทดสอบ/PM</a>
     <a href="#order" data-v="order">5 · ลำดับขั้นตอน</a>
     <a href="#quiz" data-v="quiz">6 · แบบทดสอบ</a>
+    <a href="#clin" data-v="clin">7 · ตั้งค่าทางคลินิก</a>
     <a href="#scores" data-v="scores">ผลของฉัน</a>
   </nav>
 </header>
@@ -38,6 +39,7 @@
     <a class="card" href="#pm"><div class="num">โมดูล 4</div><h3>การทดสอบหลังซ่อม / PM</h3><p>Flow accuracy, occlusion pressure, air detection, electrical safety (IEC 62353) พร้อมเครื่องคำนวณ โจทย์ฝึกตัดสินผล และแบบบันทึกผล</p></a>
     <a class="card" href="#order"><div class="num">โมดูล 5</div><h3>ลำดับขั้นตอน</h3><p>แตะเรียงขั้นตอนงานซ่อม การเปลี่ยนแบต และการเปิดเครื่องทำความสะอาด พร้อมเหตุผลของแต่ละขั้น</p></a>
     <a class="card" href="#quiz"><div class="num">โมดูล 6</div><h3>แบบทดสอบ</h3><p>สุ่ม 20 ข้อจากคลัง 30 ข้อ ส่งแล้วเห็นคะแนนแยกหมวดพร้อมเฉลย</p></a>
+    <a class="card" href="#clin"><div class="num">โมดูล 7</div><h3>การตั้งค่าใช้งานทางคลินิก</h3><p>บทเรียนการตั้งค่าและคำนวณอัตราไหล เลือกค่าตามกลุ่มผู้ป่วย เครื่องจำลองแบบกดปุ่ม และมุมช่างแยกปัญหาการตั้งค่าออกจากเครื่องเสีย</p></a>
   </div>
   <div class="note"><b>ข้อควรทราบ:</b> สื่อนี้ใช้เพื่อการเรียนการสอนเท่านั้น ค่าตัวเลขและเกณฑ์เป็นค่าโดยทั่วไป การซ่อมเครื่องจริงต้องทำตาม service manual ของผู้ผลิตรุ่นนั้น โดยช่างที่ผ่านการอบรม และต้องทดสอบความปลอดภัยทุกครั้งก่อนนำเครื่องกลับไปใช้กับผู้ป่วย</div>
 </section>
@@ -240,6 +242,7 @@
 <section class="view" id="v-pm"><div id="pm"></div></section>
 <section class="view" id="v-order"><div id="order"></div></section>
 <section class="view" id="v-quiz"><div id="quiz"></div></section>
+<section class="view" id="v-clin"><div id="clin"></div></section>
 <section class="view" id="v-scores"><div id="scores"></div></section>
 
 <!-- ALARMS -->
@@ -280,5 +283,7 @@
 <script src="js/pm.js"></script>
 <script src="js/order.js"></script>
 <script src="js/quiz.js"></script>
+<script src="data/clinical.js"></script>
+<script src="js/clinical.js"></script>
 </body>
 </html>

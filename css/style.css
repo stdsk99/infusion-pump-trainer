@@ -571,3 +571,38 @@ body.locked{overflow:hidden}
 .acenter{text-align:center;margin-top:12px}
 #userbox{margin-left:auto}
 .uname{text-decoration:none;color:var(--ink);font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap}
+
+/* ===== โมดูล 7 ===== */
+.clgrid{display:grid;gap:16px}
+@media (min-width:900px){ .clgrid{grid-template-columns:240px minmax(0,1fr);align-items:start} .clnav{position:sticky;top:112px} }
+.clnav{display:flex;flex-direction:column;gap:6px}
+@media (max-width:899px){ .clnav{flex-direction:row;overflow-x:auto} .clnav button{flex:none} }
+.clnav button{justify-content:flex-start;text-align:left;border-radius:10px}
+.clnav button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px}
+.lesson h2{margin-top:0}
+.lesson ul,.lesson ol{padding-left:22px}.lesson li{margin:4px 0}
+.exbox{background:var(--low-soft);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:14px;font-family:ui-monospace,Menlo,monospace,"IBM Plex Sans Thai"}
+.simtop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 10px}
+.simdots{display:flex;gap:6px}.simdots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.simdots i.on{background:var(--ink)}.simdots i.ok{background:var(--accent)}.simdots i.bad{background:var(--warn)}
+.order{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--mid);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.order p{margin:4px 0 0;font-size:15px}
+.pumpface{background:#2a3038;border-radius:22px;padding:16px;box-shadow:inset 0 2px 0 rgba(255,255,255,.08),0 6px 18px rgba(0,0,0,.18);max-width:520px}
+.lcd{background:#c9dcc2;color:#1c2a1a;border-radius:10px;padding:10px 14px;font-family:ui-monospace,Menlo,monospace;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+.lrow{display:grid;grid-template-columns:62px 1fr 56px;align-items:baseline;padding:3px 6px;border-radius:6px}
+.lrow span{font-size:13px;font-weight:600}.lrow b{font-size:24px;text-align:right;padding-right:8px}.lrow small{font-size:11px}
+.lrow.sel{background:#1c2a1a;color:#c9dcc2}
+.small-lcd .lrow b{font-size:18px}
+.pkeys{display:grid;grid-template-columns:auto 1fr auto;gap:10px;margin-top:14px}
+.pkeys button{background:#454d58;color:#fff;border:0;border-radius:10px;min-height:46px;font-weight:600;font-size:16px;box-shadow:0 2px 0 #1b1f25}
+.pkeys button:active{transform:translateY(2px);box-shadow:none}
+.fkeys,.ckeys{display:flex;flex-direction:column;gap:6px}
+.fkeys button{background:#0f7a6c;font-size:13px;padding:0 10px}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ckeys button{font-size:14px;padding:0 10px}
+.ckeys .startk{background:#1f9d55;min-height:58px}
+#scratch{font-family:ui-monospace,Menlo,monospace;font-size:14px}
+ul.gl{list-style:none;padding:0}ul.gl li{padding:6px 10px;border-radius:8px;margin:4px 0;font-weight:600}
+ul.gl li.ok{background:var(--accent-soft);color:var(--accent)}ul.gl li.bad{background:var(--warn-soft);color:var(--warn)}
+@media (max-width:420px){ .pkeys{grid-template-columns:1fr} .fkeys,.ckeys{flex-direction:row} .fkeys button,.ckeys button{flex:1} }
