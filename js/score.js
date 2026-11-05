@@ -21,7 +21,7 @@
     const tm = ctl ? setTimeout(()=>ctl.abort(), 20000) : 0;
     try{
       const r = await fetch(C.sheetUrl,{method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"},
-        body:JSON.stringify(Object.assign({action, token:C.token}, payload)), signal:ctl?ctl.signal:undefined});
+        body:JSON.stringify(Object.assign({action, token:C.token, app:C.app||"pump"}, payload)), signal:ctl?ctl.signal:undefined});
       clearTimeout(tm);
       return await r.json();
     }catch(e){ clearTimeout(tm); return {ok:false, err:"net"}; }
@@ -41,11 +41,19 @@
     }
   }
   function logout(){ sess=null; hist=[]; drop(K_S); drop(K_H); }
+  /* จบ session แต่เก็บประวัติไว้ (คะแนนที่รอส่งจะส่งต่อหลังเข้าสู่ระบบใหม่ด้วยบัญชีเดิม) */
+  function endSession(){ sess=null; drop(K_S); }
 
   async function sendRec(rec){
     if(!C.sheetUrl) return "local";
-    const r = await api("score", Object.assign({sid:sess.profile.sid, pin:sess.pin}, rec));
-    return r.ok ? "sent" : (r.err==="net" ? "fail" : "rejected");
+    const r = await api("score", Object.assign({tk:sess.tk}, rec));
+    if(r.ok) return "sent";
+    if(r.err==="auth" || r.err==="suspended"){   // บัตรผ่านหมดอายุ/ถูกยกเลิก: เก็บคะแนนไว้ส่งหลังเข้าสู่ระบบใหม่
+      toast("การเข้าสู่ระบบหมดอายุ กำลังพาไปเข้าสู่ระบบใหม่ คะแนนนี้จะส่งให้หลังเข้าสู่ระบบ");
+      setTimeout(()=>window.Auth&&Auth.relogin(), 2500);
+      return "fail";
+    }
+    return r.err==="net" ? "fail" : "rejected";
   }
   async function resendPending(){
     for(const h of hist.filter(x=>x.st==="fail")){
@@ -99,6 +107,6 @@
     };
   }
 
-  window.Score={record, show, idLine, api, toast, profile, session:()=>sess, setSession, logout, bestOf, has};
+  window.Score={record, show, idLine, api, toast, profile, session:()=>sess, setSession, logout, endSession, bestOf, has};
   window.Views=window.Views||{}; window.Views.scores={show};
 })();

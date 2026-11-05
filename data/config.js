@@ -8,7 +8,7 @@
 window.APP_CONFIG = {
   app: "pump",
   appName: "Infusion Pump Repair Trainer",
-  portal: "/medtechcenter/",   // ที่อยู่เว็บหลัก (โดเมนเดียวกัน) เว้นว่าง = ใช้หน้าล็อกอินของแอปเอง
+  portal: "/medtechcenter/",   // ที่อยู่เว็บหลัก (โดเมนเดียวกัน) สมัคร/เข้าสู่ระบบ/เปลี่ยนรหัสผ่านทำที่นี่ที่เดียว
   sheetUrl: "https://script.google.com/macros/s/AKfycbzLcs08L6W0fnHHZ5tCq8JjkXFPcux3G3_WT1t3vUC8zSo-oQKoACC3xHc67-h-yy6KTw/exec",
   token: "pump-2569",
   course: "ศูนย์การเรียนรู้เทคโนโลยีทางการแพทย์",
