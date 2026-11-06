@@ -47,9 +47,9 @@
 <!-- PRINCIPLE -->
 <section class="view" id="v-principle">
   <h1>หลักการทำงาน</h1>
-  <p class="muted">แตะชิ้นส่วนบนภาพเพื่อดูรายละเอียด กด “เดินเครื่อง” เพื่อดูการทำงานของกลไก peristaltic หรือเลือก “เส้นทางสัญญาณ” เพื่อดูว่าคำสั่งและสัญญาณวิ่งไปทางไหนบ้าง</p>
+  <p class="muted">เริ่มจาก “ภาพรวม” เพื่อดูว่าเครื่องทั้งเครื่องทำงานอย่างไร แล้วไปที่ “ภาพตัดภายใน” แตะชิ้นส่วนเพื่อดูรายละเอียด กด “เดินเครื่อง” เพื่อดูกลไกทำงาน หรือเลือก “เส้นทางสัญญาณ” เพื่อดูว่าคำสั่งและสัญญาณวิ่งไปทางไหน</p>
   <div class="tools">
-    <div class="seg"><button id="bt-cut" class="on">ภาพตัดภายใน</button><button id="bt-blk">Block diagram</button><button id="bt-flow">เส้นทางสัญญาณ</button></div>
+    <div class="seg"><button id="bt-ov" class="on">ภาพรวม</button><button id="bt-cut">ภาพตัดภายใน</button><button id="bt-blk">Block diagram</button><button id="bt-flow">เส้นทางสัญญาณ</button></div>
     <button id="bt-run">▶ เดินเครื่อง</button>
   </div>
   <div class="layout">
@@ -228,11 +228,12 @@
       </figure>
     </div>
 
-    <aside class="panel" id="panel">
+    <aside class="panel" id="panel" hidden>
       <h2>เลือกชิ้นส่วน</h2>
       <p class="muted">แตะชิ้นส่วนใดก็ได้บนภาพ หรือเลือกจากรายการด้านล่าง</p>
       <div class="chips" id="chips"></div>
     </aside>
+    <aside class="panel ov-panel" id="ov-panel"></aside>
   </div>
   <div id="flow" hidden></div>
 </section>
@@ -272,6 +273,8 @@
 <script src="data/flow.js"></script>
 <script src="js/flow.js"></script>
 <script src="js/app.js"></script>
+<script src="data/overview.js"></script>
+<script src="js/overview.js"></script>
 <script src="js/learn.js"></script>
 <script src="data/pm.js"></script>
 <script src="data/order.js"></script>

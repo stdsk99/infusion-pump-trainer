@@ -50,21 +50,26 @@ function select(id,scroll){
   if(scroll && window.innerWidth<900) panel.scrollIntoView({behavior:"smooth",block:"start"});
 }
 document.querySelectorAll("svg.dia").forEach(svg=>svg.addEventListener("click",e=>{
-  const p=e.target.closest(".part"); if(p) select(p.dataset.id,true);
+  const p=e.target.closest(".part"); if(p){ if(curFig==="ov") fig("cut"); select(p.dataset.id,true); }
 }));
 
 /* toggles */
-const btCut=document.getElementById("bt-cut"),btBlk=document.getElementById("bt-blk"),btFlow=document.getElementById("bt-flow"),btRun=document.getElementById("bt-run");
-let curFig="cut";
+const btOv=document.getElementById("bt-ov"),btCut=document.getElementById("bt-cut"),btBlk=document.getElementById("bt-blk"),btFlow=document.getElementById("bt-flow"),btRun=document.getElementById("bt-run");
+let curFig="ov";
+btOv.onclick=()=>fig("ov");
 btCut.onclick=()=>fig("cut");
 btBlk.onclick=()=>fig("blk");
 btFlow.onclick=()=>fig("flow");
 function fig(w){
   curFig=w;
-  [btCut,btBlk,btFlow].forEach(b=>b.classList.toggle("on",b.id==="bt-"+w));
-  document.getElementById("fig-cut").style.display=w==="cut"?"":"none";
+  [btOv,btCut,btBlk,btFlow].forEach(b=>b.classList.toggle("on",b.id==="bt-"+w));
+  document.getElementById("fig-cut").style.display=(w==="cut"||w==="ov")?"":"none";
+  document.getElementById("panel").hidden=w==="ov";
+  document.getElementById("ov-panel").hidden=w!=="ov";
+  if(w!=="ov" && window.Overview) Overview.clear();
+  if(w==="ov") document.querySelectorAll("#svg-cut .part.sel").forEach(p=>p.classList.remove("sel"));
   document.getElementById("fig-blk").style.display=w==="blk"?"":"none";
-  btRun.style.display=w==="cut"?"":"none";
+  btRun.style.display=(w==="cut"||w==="ov")?"":"none";
   document.querySelector("#v-principle .layout").style.display=w==="flow"?"none":"";
   const fl=document.getElementById("flow"); fl.hidden=w!=="flow";
   if(w==="flow" && window.Flow) Flow.start(fl); else if(window.Flow) Flow.stop();

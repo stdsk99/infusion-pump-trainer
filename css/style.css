@@ -606,3 +606,40 @@ body.locked{overflow:hidden}
 ul.gl{list-style:none;padding:0}ul.gl li{padding:6px 10px;border-radius:8px;margin:4px 0;font-weight:600}
 ul.gl li.ok{background:var(--accent-soft);color:var(--accent)}ul.gl li.bad{background:var(--warn-soft);color:var(--warn)}
 @media (max-width:420px){ .pkeys{grid-template-columns:1fr} .fkeys,.ckeys{flex-direction:row} .fkeys button,.ckeys button{flex:1} }
+
+/* ===== โมดูล 1: แท็บภาพรวม ===== */
+.ov-panel h2{margin:0 0 6px}
+.ov-sec{border-top:1px solid var(--line);padding:4px 0}
+.ov-sec>summary{cursor:pointer;font-weight:700;padding:10px 0;list-style:none;display:flex;justify-content:space-between;gap:8px}
+.ov-sec>summary::-webkit-details-marker{display:none}
+.ov-sec>summary::after{content:"＋";color:var(--muted)}
+.ov-sec[open]>summary::after{content:"－"}
+.ov-body p{margin:0 0 10px;line-height:1.65}
+.ov-body ul{margin:0 0 8px;padding-left:20px}
+.ov-body li{margin:4px 0;line-height:1.6}
+.ov-path{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 6px}
+.ov-node{font:inherit;font-size:13.5px;padding:6px 10px;border-radius:10px;border:1.5px solid var(--accent);background:var(--card);color:var(--ink,inherit);cursor:pointer}
+.ov-node.end{border-style:dashed;border-color:var(--line);color:var(--muted);cursor:default}
+.ov-node:not(.end):hover,.ov-node.on-hi{background:var(--hi-soft);border-color:var(--hi)}
+.ov-arr{color:var(--muted)}
+.ov-tbl{overflow-x:auto}
+.ov-tbl table{border-collapse:collapse;width:100%;font-size:14px}
+.ov-tbl th,.ov-tbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left;vertical-align:top}
+.ov-tbl th{font-size:13px;color:var(--muted);font-weight:600}
+.ov-tbl tbody tr{cursor:pointer}
+.ov-tbl tbody tr:hover,.ov-tbl tbody tr.on-hi{background:var(--hi-soft)}
+.ov-show{margin-bottom:8px;cursor:pointer;font:inherit;font-size:13px}
+.ov-show.on-hi{outline:2px solid var(--hi)}
+.ov-dots{display:flex;gap:6px;margin:2px 0 10px}
+.ov-dots button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--accent);background:var(--card);font:inherit;font-weight:700;cursor:pointer;color:var(--accent)}
+.ov-dots button.on{background:var(--accent);color:#fff}
+.ov-step{background:var(--accent-soft,#eef6f4);border-radius:12px;padding:12px 14px;min-height:96px}
+.ov-step p{margin:6px 0 0}
+.ov-nav{display:flex;justify-content:space-between;margin-top:10px}
+.ov-nav button{font:inherit;padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.ov-nav button:disabled{opacity:.4;cursor:default}
+.ov-check{padding-left:20px;margin:0}
+.ov-check li{margin:0 0 10px}
+.ov-check li>p{margin:0 0 4px}
+.ov-check details summary{cursor:pointer;color:var(--accent);font-size:14px}
+.ov-check details p{margin:6px 0 0;color:var(--muted)}
