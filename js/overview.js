@@ -30,6 +30,7 @@
     <p class="muted small">ไม่นับคะแนน ทำเสร็จแล้วลองไปแท็บ “ภาพตัดภายใน” เพื่อดูรายละเอียดทีละชิ้น</p>`;
 
   box.innerHTML = `<div class="en">ภาพรวม</div><h2>เครื่องทำงานอย่างไร</h2>
+    ${O.link3d?`<a class="ov-3d" href="${O.link3d}">ดูเครื่องแบบ 3 มิติ<small>หมุน เปิดฝา ถอดชิ้นส่วน และดูลมร้อนหมุนเวียน</small><span aria-hidden="true">→</span></a>`:""}
     ${sec("เครื่องนี้ทำหน้าที่อะไร", `<p>${esc(O.what)}</p>`, true)}
     ${sec(O.mechTitle, O.mech.map(p=>`<p>${esc(p)}</p>`).join("") + `<button type="button" class="pill ov-show" data-ids="${O.mechIds.join(" ")}">ดูบนภาพตัด</button>`, true)}
     ${sec(O.pathTitle, path)}
