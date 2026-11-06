@@ -2,7 +2,7 @@
 (function(){
   const C = window.APP_CONFIG || {};
   const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const K_S="ipt-session", K_H="ipt-history";
+  const ST=C.store||"ipt", K_S=ST+"-session", K_H=ST+"-history";   // แยกคีย์ตามแอป (ทุกแอปอยู่โดเมนเดียวกันบน GitHub Pages)
   const load=(k,d)=>{ try{ return JSON.parse(localStorage.getItem(k))||d; }catch(e){ return d; } };
   const save=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
   const drop=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
@@ -78,7 +78,7 @@
 
   function asText(){
     const p=profile()||{};
-    return [`${C.course||""} · Infusion Pump Repair Trainer`,`ชื่อ: ${p.name||"-"}  รหัสผู้ใช้: ${p.sid||"-"}  ${p.type==="gp"?"หน่วยงาน: "+(p.org||"-"):"กลุ่ม: "+(p.sec||"-")}`,""]
+    return [`${C.course||""} · ${C.appName||"Infusion Pump Repair Trainer"}`,`ชื่อ: ${p.name||"-"}  รหัสผู้ใช้: ${p.sid||"-"}  ${p.type==="gp"?"หน่วยงาน: "+(p.org||"-"):"กลุ่ม: "+(p.sec||"-")}`,""]
       .concat(hist.map(h=>`${new Date(h.t).toLocaleString("th-TH")}\t${h.mod}\t${h.item}\t${h.score}/${h.max}`)).join("\n");
   }
 
@@ -95,7 +95,7 @@
         :"ℹ️ ระบบนี้ยังไม่ได้เชื่อมต่อ Google Sheets คะแนนเก็บไว้ในเบราว์เซอร์นี้เท่านั้น"}</div>
       <div id="cert-box"></div>
       <h2>ประวัติคะแนน (${hist.length})</h2>
-      ${hist.length?`<div class="htable">${hist.map(h=>`<div class="hrow"><div><b>${esc(h.item)}</b><small>${esc(h.mod)} · ${new Date(h.t).toLocaleString("th-TH",{dateStyle:"short",timeStyle:"short"})} · ${stTh[h.st]||""}</small></div><span class="hs">${h.score}/${h.max}</span></div>`).join("")}</div>`:`<p class="muted">ยังไม่มีคะแนน ลองทำกิจกรรมในโมดูล 3–6</p>`}
+      ${hist.length?`<div class="htable">${hist.map(h=>`<div class="hrow"><div><b>${esc(h.item)}</b><small>${esc(h.mod)} · ${new Date(h.t).toLocaleString("th-TH",{dateStyle:"short",timeStyle:"short"})} · ${stTh[h.st]||""}</small></div><span class="hs">${h.score}/${h.max}</span></div>`).join("")}</div>`:`<p class="muted">${esc(C.emptyHint||"ยังไม่มีคะแนน ลองทำกิจกรรมในโมดูล 3–7")}</p>`}
       <div class="tools"><button class="primary" id="sc-cp">คัดลอกผลทั้งหมด</button></div>
       <div id="sc-cf"></div>`;
     root.querySelector("#sc-out").onclick=()=>window.Auth&&Auth.signOut();
