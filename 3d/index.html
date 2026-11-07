@@ -15,7 +15,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=1">
+<link rel="stylesheet" href="style.css?v=4">
 <script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
 </head>
 <body>
@@ -38,6 +38,7 @@
         <div class="seg" id="views">
           <button data-v="iso" class="on">มุมเฉียง</button><button data-v="front">ด้านหน้า</button><button data-v="back">ด้านหลัง</button><button data-v="all">ทั้งชุด</button>
         </div>
+        <button id="b-task">🎯 โหมดฝึก</button>
         <button id="b-lbl" class="on">ป้ายชื่อ</button>
         <button id="b-hood">ตัวเครื่อง: ทึบ</button>
         <button id="b-air">▶ เดินเครื่อง</button>
@@ -48,11 +49,16 @@
       </div>
     </div>
   </section>
-  <aside class="side" id="side"></aside>
+  <aside class="side" id="sidewrap"><div class="task" id="task" hidden></div><div id="side"></div></aside>
 </main>
 
 <script src="../data/parts.js"></script>
-<script src="data.js?v=1"></script>
-<script type="module" src="main.js?v=1"></script>
+<script>
+/* โหมดฝึก: ใช้ระบบคะแนนของวิชาที่เปิดหน้านี้ (ช่างหรือพยาบาล) เพื่อบันทึกเป็นประวัติ */
+document.write('<script src="../'+(/[?&]mode=clin/.test(location.search)?'clinical/':'')+'data/config.js"><\/script><script src="../js/score.js"><\/script>');
+</script>
+<script src="data.js?v=4"></script>
+<script src="task.js?v=1"></script>
+<script type="module" src="main.js?v=5"></script>
 </body>
 </html>

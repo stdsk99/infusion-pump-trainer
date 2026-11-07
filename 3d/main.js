@@ -253,6 +253,7 @@ function toggle(k) {
     if (dep) { toast("ต้อง" + A[dep].off + "ก่อน"); return; }
   }
   a.t = turnOn ? 1 : 0; refresh();
+  if (window.Task3D) Task3D.onToggle(k, turnOn);
 }
 
 /* ---------- เดินเครื่อง: นิ้วกดบีบสายเป็นคลื่น + หยดใน chamber ---------- */
@@ -325,7 +326,7 @@ const side = document.getElementById("side");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function groupOf(id) { const g = GROUPS.find(g => g.ids.includes(id)); return g ? g.t : ""; }
 function renderSide() {
-  side.scrollTop = 0;
+  side.parentElement.scrollTop = 0;
   if (!selected) {
     side.innerHTML = `<h2>ชิ้นส่วนทั้งหมด</h2>
       <p class="en">${MODE === "clin" ? "โหมดพยาบาล · เน้นสิ่งที่ผู้ใช้ต้องดูแล" : "โหมดช่าง · หน้าที่ หลักการ อาการเสีย และวิธีตรวจ"}</p>
@@ -403,8 +404,9 @@ bAir.onclick = () => {
 };
 const exInput = document.getElementById("explode");
 let exT = 0, exV = 0;
-exInput.oninput = () => { exT = exInput.value / 100; };
+exInput.oninput = () => { if (window.Task3D && Task3D.active()) { exInput.value = 0; toast("โหมดฝึก: ปิดการแยกชิ้นส่วนอัตโนมัติ"); return; } exT = exInput.value / 100; };
 document.getElementById("b-reset").onclick = () => {
+  if (window.Task3D && Task3D.active()) { toast("โหมดฝึก: ประกอบกลับทีละชิ้นด้วยตัวเอง"); return; }
   for (const k in A) A[k].t = 0; exT = 0; exInput.value = 0; refresh();
 };
 
@@ -463,7 +465,7 @@ renderer.setAnimationLoop(() => {
 /* จอแคบ: ย้ายแถบเครื่องมือมาไว้ใต้ภาพเป็นแถวเลื่อนซ้าย-ขวา และปิดป้ายชื่อไว้ก่อนเพื่อไม่ให้รก */
 const bar = document.querySelector(".bar");
 function layout(narrow) {
-  if (narrow) document.querySelector(".main").insertBefore(bar, side);
+  if (narrow) document.querySelector(".main").insertBefore(bar, side.parentElement);
   else stage.appendChild(bar);
   resize(); view(curView, true);
 }
@@ -472,4 +474,5 @@ if (MOBILE) { bLbl.classList.remove("on"); labelR.domElement.classList.add("off"
 NARROW.addEventListener("change", e => layout(e.matches));
 document.getElementById("loading").remove();
 renderSide();
+if (window.Task3D) Task3D.init({ A, MODE, toast, reset: () => { exT = 0; exInput.value = 0; select(null); } });
 window.__pump3d = { A, toggle, select, view };   // ใช้ทดสอบ
