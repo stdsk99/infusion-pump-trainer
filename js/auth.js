@@ -64,7 +64,15 @@
     relogin();
   }
 
+  /* โหมดดูตัวอย่าง (?preview): ไม่ต้องเข้าสู่ระบบ แสดงแถบบอกโหมดแทนชื่อผู้ใช้ */
+  function previewBar(){
+    const bar=document.querySelector("header .bar"); if(!bar) return;
+    const b=document.createElement("div"); b.id="userbox";
+    b.innerHTML=`<span class="uname" style="background:#fff4d6;border-color:#e8c46a" title="คะแนนไม่ส่งเข้าระบบ">👁 โหมดดูตัวอย่าง</span>`;
+    bar.appendChild(b);
+  }
   function init(){
+    if(window.PREVIEW) return previewBar();
     const own = window.Score.session(), m = portalSess();
     if(!m){ if(own) window.Score.logout(); return toPortal("course.html?c="+APP); }
     if(own && own.tk === m.tk && own.profile.sid === m.profile.sid) return userBox();

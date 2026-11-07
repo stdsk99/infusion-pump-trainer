@@ -6,7 +6,11 @@
   const load=(k,d)=>{ try{ return JSON.parse(localStorage.getItem(k))||d; }catch(e){ return d; } };
   const save=(k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} };
   const drop=k=>{ try{ localStorage.removeItem(k); }catch(e){} };
-  let sess = load(K_S,null), hist = load(K_H,[]);
+  /* โหมดดูตัวอย่าง (?preview): ให้ผู้สอนเปิดดูเนื้อหาได้โดยไม่ต้องเข้าสู่ระบบ คะแนนเก็บในเครื่องแยกไว้ ไม่ส่งเข้าระบบ */
+  const PREVIEW = window.PREVIEW = /[?&]preview\b/.test(location.search);
+  const K_HP = ST+"-preview-history";
+  let sess = PREVIEW ? {profile:{name:"ผู้ตรวจ (ดูตัวอย่าง)", sid:"preview", type:"gp", org:"โหมดดูตัวอย่าง"}, tk:""} : load(K_S,null),
+      hist = load(PREVIEW ? K_HP : K_H, []);
 
   function toast(msg){
     let t=document.getElementById("gtoast");
@@ -36,7 +40,7 @@
       const pending = hist.filter(h=>h.st==="fail" && h.sid===s.profile.sid);
       hist = serverHist.map(h=>Object.assign({st:"sent"},h)).concat(pending)
         .sort((a,b)=>new Date(b.t)-new Date(a.t)).slice(0,500);
-      save(K_H,hist);
+      save(PREVIEW?K_HP:K_H,hist);
       if(pending.length) resendPending();
     }
   }
@@ -45,7 +49,7 @@
   function endSession(){ sess=null; drop(K_S); }
 
   async function sendRec(rec){
-    if(!C.sheetUrl) return "local";
+    if(PREVIEW || !C.sheetUrl) return "local";
     const r = await api("score", Object.assign({tk:sess.tk}, rec));
     if(r.ok) return "sent";
     if(r.err==="auth" || r.err==="suspended"){   // บัตรผ่านหมดอายุ/ถูกยกเลิก: เก็บคะแนนไว้ส่งหลังเข้าสู่ระบบใหม่
@@ -59,7 +63,7 @@
     for(const h of hist.filter(x=>x.st==="fail")){
       const st = await sendRec(h); h.st = st==="sent"?"sent":"fail";
     }
-    save(K_H,hist);
+    save(PREVIEW?K_HP:K_H,hist);
   }
 
   /* บันทึกคะแนน: key=รหัสกิจกรรม mod=โมดูล item=รายการ score/max detail=ข้อความเพิ่ม */
@@ -68,8 +72,8 @@
     const p=sess.profile;
     const rec={t:new Date().toISOString(), sid:p.sid, key:r.key||"", mod:r.mod, item:r.item, score:r.score, max:r.max, detail:r.detail||""};
     rec.st = await sendRec(rec);
-    hist.unshift(rec); hist=hist.slice(0,500); save(K_H,hist);
-    toast(rec.st==="sent"?"บันทึกคะแนนเข้าระบบแล้ว":rec.st==="fail"?"ส่งคะแนนไม่สำเร็จ จะส่งให้อีกครั้งเมื่อเข้าสู่ระบบครั้งถัดไป":rec.st==="rejected"?"ระบบไม่รับคะแนน กรุณาออกจากระบบแล้วเข้าใหม่":"บันทึกคะแนนไว้ในเครื่องแล้ว");
+    hist.unshift(rec); hist=hist.slice(0,500); save(PREVIEW?K_HP:K_H,hist);
+    toast(rec.st==="sent"?"บันทึกคะแนนเข้าระบบแล้ว":rec.st==="fail"?"ส่งคะแนนไม่สำเร็จ จะส่งให้อีกครั้งเมื่อเข้าสู่ระบบครั้งถัดไป":rec.st==="rejected"?"ระบบไม่รับคะแนน กรุณาออกจากระบบแล้วเข้าใหม่":(PREVIEW?"โหมดดูตัวอย่าง: เก็บไว้ในเครื่องนี้ ไม่ส่งเข้าระบบ":"บันทึกคะแนนไว้ในเครื่องแล้ว"));
   }
 
   /* ใช้แสดงความคืบหน้าในรายการกิจกรรม */
@@ -91,7 +95,7 @@
       <div class="ticket"><div class="tk-h"><span>ข้อมูลผู้เรียน</span><button class="ghost" id="sc-out">ออกจากระบบ</button></div>
         <dl><dt>ชื่อ</dt><dd>${esc(p.name)}</dd><dt>ประเภท</dt><dd>${p.type==="gp"?"บุคลากร / บุคคลทั่วไป":"นักศึกษา"}</dd>
         ${p.type==="gp"?`<dt>อีเมล</dt><dd>${esc(p.sid)}</dd><dt>หน่วยงาน</dt><dd>${esc(p.org)}${p.role?" · "+esc(p.role):""}</dd>`:`<dt>รหัส</dt><dd>${esc(p.sid)}</dd><dt>กลุ่ม</dt><dd>${esc(p.sec||"-")}</dd>`}</dl></div>
-      <div class="hint">${C.sheetUrl?(pend?`⏳ มีคะแนนรอส่ง ${pend} รายการ <button id="sc-rs">ส่งอีกครั้ง</button>`:"✅ คะแนนทั้งหมดบันทึกเข้าระบบแล้ว เข้าสู่ระบบจากเครื่องอื่นก็ทำต่อได้")
+      <div class="hint">${PREVIEW?"👁 โหมดดูตัวอย่าง: คะแนนเก็บไว้ในเครื่องนี้เท่านั้น ไม่ส่งเข้าระบบและไม่นับผล":C.sheetUrl?(pend?`⏳ มีคะแนนรอส่ง ${pend} รายการ <button id="sc-rs">ส่งอีกครั้ง</button>`:"✅ คะแนนทั้งหมดบันทึกเข้าระบบแล้ว เข้าสู่ระบบจากเครื่องอื่นก็ทำต่อได้")
         :"ℹ️ ระบบนี้ยังไม่ได้เชื่อมต่อ Google Sheets คะแนนเก็บไว้ในเบราว์เซอร์นี้เท่านั้น"}</div>
       <div id="cert-box"></div>
       <h2>ประวัติคะแนน (${hist.length})</h2>
