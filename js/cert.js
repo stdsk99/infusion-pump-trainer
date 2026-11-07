@@ -8,23 +8,27 @@
   /* คำนวณความคืบหน้าจากประวัติคะแนน */
   function progress(hist){
     if(window.CertProgress) return window.CertProgress(hist, CR);   // แอปที่มีเกณฑ์แบบอื่น (เช่น วิชาคลินิก)
-    const learn=new Set(), exam={}, order=new Set(); let quiz=0, clin=0;
+    const learn=new Set(), exam={}, order=new Set(); let quiz=0, clin=0, acc=0, pm=0;
     hist.forEach(h=>{ const k=h.key||"";
       if(k.startsWith("learn:")) learn.add(k);
       if(k.startsWith("exam:")) exam[k]=Math.max(exam[k]||0, +h.score);
       if(k.startsWith("order:")) order.add(k);
       if(k==="quiz" && h.max) quiz=Math.max(quiz, Math.round(h.score/h.max*100));
       if(k==="clin:sim" && h.max) clin=Math.max(clin, Math.round(h.score/h.max*100));
+      if(k==="accept" && h.max) acc=Math.max(acc, Math.round(h.score/h.max*100));
+      if(k==="pmplan" && h.max) pm=Math.max(pm, Math.round(h.score/h.max*100));
     });
     const ev=Object.values(exam), avg=ev.length?Math.round(ev.reduce((a,b)=>a+b,0)/ev.length):0;
     const items=[
       {n:`โหมดเรียนรู้ ทำครบ ${CR.learnCases} เคส`, v:`${learn.size}/${CR.learnCases}`, ok:learn.size>=CR.learnCases},
       {n:`โหมดสอบ ทำครบ ${CR.examCases} เคส และเฉลี่ย ≥ ${CR.examAvg} คะแนน`, v:`${ev.length}/${CR.examCases} เคส · เฉลี่ย ${avg}`, ok:ev.length>=CR.examCases && avg>=CR.examAvg},
       {n:`แบบทดสอบ ≥ ${CR.quizPct}%`, v:`ดีที่สุด ${quiz}%`, ok:quiz>=CR.quizPct},
-      {n:`ลำดับขั้นตอน ทำครบ ${CR.orderTasks} งาน`, v:`${order.size}/${CR.orderTasks}`, ok:order.size>=CR.orderTasks},
-      {n:`เครื่องจำลองการตั้งค่าทางคลินิก ≥ ${CR.clinSimPct||80}%`, v:`ดีที่สุด ${clin}%`, ok:clin>=(CR.clinSimPct||80)}
+      {n:`ลำดับขั้นตอน ทำครบ ${CR.orderTasks} งาน`, v:`${order.size}/${CR.orderTasks}`, ok:order.size>=CR.orderTasks}
     ];
-    return {items, pass:items.every(i=>i.ok), learn:learn.size, examN:ev.length, avg, quiz, order:order.size, clin};
+    if(CR.clinSimPct) items.push({n:`การใช้งานสำหรับช่าง (ฝึกตั้งค่า + มุมช่าง) ≥ ${CR.clinSimPct}%`, v:`ดีที่สุด ${clin}%`, ok:clin>=CR.clinSimPct});
+    if(CR.acceptPct) items.push({n:`ตรวจรับเครื่อง ≥ ${CR.acceptPct}%`, v:`ดีที่สุด ${acc}%`, ok:acc>=CR.acceptPct});
+    if(CR.pmPct) items.push({n:`PM ตามแผน ≥ ${CR.pmPct}%`, v:`ดีที่สุด ${pm}%`, ok:pm>=CR.pmPct});
+    return {items, pass:items.every(i=>i.ok), learn:learn.size, examN:ev.length, avg, quiz, order:order.size, clin, acc, pm};
   }
 
   /* วาดใบรับรองลง canvas (A4 แนวนอน) */
@@ -51,7 +55,8 @@
     lines.forEach((l,i)=>t(l,660+i*50,34,500,ink));
     let y=660+lines.length*50+6;
     t(`${CE.subject||""} ตามเกณฑ์ที่กำหนดครบทุกข้อ`,y,30,400,ink); y+=100;
-    t(pr.line || `โหมดเรียนรู้ ${pr.learn} เคส  ·  โหมดสอบเฉลี่ย ${pr.avg} คะแนน  ·  แบบทดสอบ ${pr.quiz}%  ·  ลำดับขั้นตอน ${pr.order} งาน  ·  ตั้งค่าทางคลินิก ${pr.clin}%`,y,21,400,mut); y+=110;
+    const line = pr.line || `โหมดเรียนรู้ ${pr.learn} เคส · สอบเฉลี่ย ${pr.avg} · แบบทดสอบ ${pr.quiz}% · ลำดับขั้นตอน ${pr.order} งาน${CR.clinSimPct?` · ใช้งานสำหรับช่าง ${pr.clin}%`:""}${CR.acceptPct?` · ตรวจรับ ${pr.acc}%`:""}${CR.pmPct?` · PM ${pr.pm}%`:""}`;
+    t(line,y,line.length>110?18:line.length>90?20:24,400,mut); y+=110;
     const d=new Date(); t(`ให้ไว้ ณ วันที่ ${thDate(d)}`,y,34,500,ink);
     const rid=p.type==="gp"?("G"+[...p.sid].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7).toString(36).toUpperCase().slice(0,6)):p.sid;
     const ref=`${CE.ref||"IPT"}-${rid}-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;

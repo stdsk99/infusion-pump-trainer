@@ -1,0 +1,40 @@
+/* โมดูล 8 ตรวจรับเครื่อง · โมดูล 9 PM ตามแผน (ใช้ร่วมกับ js/svc.js) */
+#accept .tstat,#pmplan .tstat{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin:0 0 10px;font-size:14px}
+#accept .tp,#pmplan .tp{border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:13px}
+#accept .tp.ok,#pmplan .tp.ok{background:var(--accent-soft);color:var(--accent);border-color:transparent;font-weight:600}
+#accept .pmtabs,#pmplan .pmtabs{margin:4px 0 14px}
+#accept .lesson h3,#pmplan .lesson h3{margin:18px 0 6px;font-size:17px}
+#accept .lesson p,#pmplan .lesson p{margin:6px 0}
+#accept .lesson .msg,#pmplan .lesson .msg,#accept .lesson .hint,#pmplan .lesson .hint{margin:10px 0}
+#accept .tblwrap,#pmplan .tblwrap{overflow-x:auto;margin:10px 0}
+#accept .ltbl,#pmplan .ltbl{border-collapse:collapse;width:100%;font-size:14px;min-width:420px;background:var(--card)}
+#accept .ltbl th,#accept .ltbl td,#pmplan .ltbl th,#pmplan .ltbl td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+#accept .ltbl th,#pmplan .ltbl th{background:var(--bg);font-weight:600}
+#accept .srcs,#pmplan .srcs{border-top:1px solid var(--line);margin-top:16px;padding-top:10px;font-size:13px}
+#accept .srcs ul,#pmplan .srcs ul{margin:4px 0 0;padding-left:18px}
+#accept .srcs li,#pmplan .srcs li{margin:2px 0}
+#accept .simtop,#pmplan .simtop{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+#accept h2,#pmplan h2{margin:4px 0 10px;font-size:20px}
+.svinfo .ltbl{min-width:0}
+.svinfo .tblwrap{margin-top:8px}
+.svitem{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:10px}
+.svitem h3{margin:2px 0 6px;font-size:17px}
+.svval{font-size:16px;font-weight:600;background:var(--bg);border-radius:8px;padding:8px 10px;margin:4px 0 6px}
+#pmplan .svplan{min-width:560px}
+.svplan td:last-child{width:190px}
+.svplan tr.good td{background:var(--accent-soft)}
+.svplan tr.bad td{background:var(--warn-soft)}
+.seg2{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg2 button{border:0;border-radius:0;padding:6px 12px;font-size:13px}
+.seg2 button+button{border-left:1px solid var(--line)}
+.svwhy{margin-top:6px}
+.svwhy:empty{display:none}
+@media (max-width:700px){
+  #pmplan .svplan{min-width:0}
+  .svplan thead{display:none}
+  .svplan,.svplan tbody,.svplan tr,.svplan td{display:block;width:auto!important}
+  .svplan tr{border:1px solid var(--line);border-radius:10px;margin-bottom:8px;overflow:hidden}
+  #pmplan .svplan td{border:0;padding:6px 12px}
+  .svplan td:first-child{padding-top:10px}
+  .svplan td:last-child{padding-bottom:12px}
+}
