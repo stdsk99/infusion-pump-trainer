@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เครื่องควบคุมการให้สารละลายแบบ 3 มิติ</title>
+<script>
+/* ต้องเข้าสู่ระบบที่เว็บหลักก่อน (เหมือนแอปหลัก) */
+(function(){
+  var clin = /[?&]mode=clin/.test(location.search);
+  if(/[?&]preview\b/.test(location.search)) return;   // โหมดดูตัวอย่าง: ไม่ต้องเข้าสู่ระบบ
+  var s=null; try{ s=JSON.parse(localStorage.getItem("mtc-session")||"null"); }catch(e){}
+  if(!s || !s.tk){ location.replace("/medtechcenter/course.html?c=" + (clin ? "pump-clin" : "pump")); }
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+<script type="importmap">{"imports":{"three":"./lib/three.module.min.js"}}</script>
+</head>
+<body>
+<header class="top">
+  <div class="logo">3D</div>
+  <div class="ttl">
+    <h1>เครื่องควบคุมการให้สารละลายแบบ 3 มิติ</h1>
+    <p>ลากเพื่อหมุน · หมุนล้อเมาส์หรือถ่างนิ้วเพื่อซูม · แตะชิ้นส่วนเพื่อดูคำอธิบายและสั่งให้ขยับ</p>
+  </div>
+  <a class="back" id="back" href="../#principle">← กลับโมดูล 1</a>
+</header>
+
+<main class="main">
+  <section class="stage" id="stage">
+    <div class="hint">แตะชิ้นส่วนเพื่อเลือก · แตะประตูเครื่องเพื่อเปิด-ปิด</div>
+    <div class="toast" id="toast" hidden></div>
+    <div class="loading" id="loading">กำลังโหลดภาพ 3 มิติ…</div>
+    <div class="bar">
+      <div class="row">
+        <div class="seg" id="views">
+          <button data-v="iso" class="on">มุมเฉียง</button><button data-v="front">ด้านหน้า</button><button data-v="back">ด้านหลัง</button><button data-v="all">ทั้งชุด</button>
+        </div>
+        <button id="b-lbl" class="on">ป้ายชื่อ</button>
+        <button id="b-hood">ตัวเครื่อง: ทึบ</button>
+        <button id="b-air">▶ เดินเครื่อง</button>
+      </div>
+      <div class="row">
+        <label class="ex">แยกชิ้นส่วน <input type="range" id="explode" min="0" max="100" value="0"></label>
+        <button id="b-reset">↺ ประกอบกลับ</button>
+      </div>
+    </div>
+  </section>
+  <aside class="side" id="side"></aside>
+</main>
+
+<script src="../data/parts.js"></script>
+<script src="data.js?v=1"></script>
+<script type="module" src="main.js?v=1"></script>
+</body>
+</html>

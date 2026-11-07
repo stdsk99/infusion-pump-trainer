@@ -37,3 +37,5 @@ a.btn{display:inline-flex;align-items:center;text-decoration:none;color:var(--in
 @keyframes pmblink{50%{opacity:.45}}
 @media (prefers-reduced-motion:reduce){.pmon.alm .pm-msg{animation:none}}
 .pm-note{margin-top:8px;background:#2b3c48;border-radius:8px;padding:6px 10px;font-size:13px;color:#f4e3b5;font-family:"IBM Plex Sans Thai",sans-serif}
+
+.go3d{display:inline-block;margin:0 6px 4px 0;padding:8px 14px;border-radius:10px;background:var(--accent);color:#fff!important;text-decoration:none;font-weight:700}
