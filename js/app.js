@@ -104,6 +104,7 @@ function route(){
   const v=(location.hash||"#home").slice(1);
   const names=[...document.querySelectorAll("#nav a")].map(x=>x.dataset.v);
   const name=names.includes(v)?v:"home";
+  if(window.MGate){ const g=MGate.guard(name); if(g!==name){ location.replace("#"+g); return; } }
   document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+name));
   document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===name));
   const na=document.querySelector("#nav a.on"); if(na){const nv=document.getElementById("nav"); nv.scrollLeft=na.offsetLeft-nv.clientWidth/2+na.offsetWidth/2;}
@@ -113,6 +114,7 @@ function route(){
   if(name!=="principle" && window.Flow) Flow.stop();
   if(name==="principle" && curFig==="flow" && !pendingPart && window.Flow) Flow.start(document.getElementById("flow"));
   if(name==="principle" && pendingPart){btCut.click();select(pendingPart,false);pendingPart=null;}
+  if(window.MGate){ MGate.decorate(); MGate.mount(document.getElementById("v-"+name)); }
   if(!openAlarm) window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",route);

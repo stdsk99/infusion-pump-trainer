@@ -1,7 +1,7 @@
-/* ===== โมดูล 8 ตรวจรับเครื่อง และโมดูล 9 PM ตามแผน (ไฟล์เดียวกันทั้งแอปปั๊มและตู้อบ) =====
+/* ===== โมดูล 7 ตรวจรับเครื่อง และโมดูล 8 PM ตามแผน (ไฟล์เดียวกันทั้งแอปปั๊มและตู้อบ) =====
    ข้อมูลอยู่ใน data/svc.js (window.SVC) ของแต่ละแอป
-   โมดูล 8: บทเรียน + ใบตรวจรับจำลอง 4 กรณี × 5 ข้อ = 20 คะแนน → key "accept"
-   โมดูล 9: บทเรียน + ก. วางแผน PM (ตัดสินทีละเครื่อง) + ข. ทำ PM จำลอง (ตัดสินทีละรายการ + สรุปผล) = 20 คะแนน → key "pmplan"
+   โมดูล 7: บทเรียน + ใบตรวจรับจำลอง 4 กรณี × 5 ข้อ = 20 คะแนน → key "accept"
+   โมดูล 8: บทเรียน + ก. วางแผน PM (ตัดสินทีละเครื่อง) + ข. ทำ PM จำลอง (ตัดสินทีละรายการ + สรุปผล) = 20 คะแนน → key "pmplan"
    นับคะแนนจากคำตอบแรกของแต่ละข้อ เกณฑ์ผ่าน ≥ 80% (ตาม criteria.acceptPct / pmPct)
    ส่งคะแนนครั้งเดียวเมื่อทำครบทั้งโมดูล (ระหว่างทำเก็บผลไว้ในเครื่อง) */
 (function(){
@@ -44,10 +44,10 @@
     });
   }
 
-  /* ================= โมดูล 8 ตรวจรับเครื่อง ================= */
+  /* ================= โมดูล 7 ตรวจรับเครื่อง ================= */
   (function(){
     const D=S.accept, root=document.getElementById("accept"); if(!D||!root) return;
-    const PCT=CR.acceptPct||80, MOD="8-ตรวจรับเครื่อง";
+    const PCT=CR.acceptPct||80, MOD="7-ตรวจรับเครื่อง";
     let tab="learn", run=null;
     const MAX=D.cases.reduce((a,c)=>a+c.qs.length,0);
     function frame(body){
@@ -87,17 +87,17 @@
         detail:D.cases.map((c,i)=>c.id+" "+run.pts[i].reduce((a,b)=>a+b,0)+"/"+c.qs.length).join(", ")}); }
       frame(`<div class="score ${pct>=PCT?"ok":pct>=60?"mid":"bad"}"><div class="big">${tot}/${MAX}</div><div>${pct}% ${pct>=PCT?"· ผ่านเกณฑ์":"· เกณฑ์ผ่าน "+PCT+"%"}</div></div>
         <ol class="recap">${D.cases.map((c,i)=>`<li><b>${run.pts[i].reduce((a,b)=>a+b,0)}/${c.qs.length} · ${esc(c.n)}</b><span>ผลที่ถูก: ${esc(c.verdict)}</span></li>`).join("")}</ol>
-        <div class="tools"><button class="primary" id="ac-a">ทำใหม่</button><a class="btn" href="#pmplan">ไปโมดูล 9 PM ▶</a></div>`);
+        <div class="tools"><button class="primary" id="ac-a">ทำใหม่</button><a class="btn" href="#pmplan">ไปโมดูล 8 PM ▶</a></div>`);
       root.querySelector("#ac-a").onclick=()=>{ run={ci:0,qi:0,pts:D.cases.map(()=>[])}; step(); };
     }
     function render(){ if(tab==="learn") return learn(); if(run&&!run.saved) return step(); intro(); }
     window.Views=window.Views||{}; window.Views.accept={show:()=>{ if(!root.innerHTML) render(); }};
   })();
 
-  /* ================= โมดูล 9 PM ตามแผน ================= */
+  /* ================= โมดูล 8 PM ตามแผน ================= */
   (function(){
     const D=S.pm, root=document.getElementById("pmplan"); if(!D||!root) return;
-    const PCT=CR.pmPct||80, MOD="9-PM ตามแผน";
+    const PCT=CR.pmPct||80, MOD="8-PM ตามแผน";
     const NP=D.plan.devices.length, NS=D.sim.items.length+1, MAX=NP+NS;
     let tab="learn", sim=null;
     function partBar(){
@@ -150,7 +150,7 @@
         root.querySelector("#pl-c").remove();
         const r=savePart("plan", ok);
         root.querySelector("#pl-f").innerHTML=`<div class="fb ${ok>=NP*0.8?"good":"bad"}"><b>ได้ ${ok}/${NP}</b><p>${esc(P.lesson)}</p>
-          ${r.done?`<p><b>ส่งคะแนนโมดูล 9 แล้ว: ${r.score}/${MAX}</b></p>`:""}
+          ${r.done?`<p><b>ส่งคะแนนโมดูล 8 แล้ว: ${r.score}/${MAX}</b></p>`:""}
           <div class="tools"><button id="pl-a">ทำใหม่</button><button class="primary" id="pl-n">ไป ข. ทำ PM จำลอง ▶</button></div></div>`;
         root.querySelector("#pl-a").onclick=plan;
         root.querySelector("#pl-n").onclick=()=>{ tab="sim"; render(); window.scrollTo(0,0); };
@@ -186,7 +186,7 @@
       const sc=sim.pts.reduce((a,b)=>a+b,0)+sim.final;
       if(!sim.saved){ sim.saved=true; sim.res=savePart("sim", sc); }
       frame(`<div class="score ${sc>=NS*0.8?"ok":"bad"}"><div class="big">${sc}/${NS}</div><div>ข. ทำ PM จำลอง</div></div>
-        ${sim.res.done?`<p class="hint">ส่งคะแนนโมดูล 9 แล้ว: ${sim.res.score}/${MAX} (${Math.round(sim.res.score/MAX*100)}%)</p>`:`<p class="hint">ทำ ก. วางแผน PM ให้ครบ ระบบจึงส่งคะแนนโมดูล 9</p>`}
+        ${sim.res.done?`<p class="hint">ส่งคะแนนโมดูล 8 แล้ว: ${sim.res.score}/${MAX} (${Math.round(sim.res.score/MAX*100)}%)</p>`:`<p class="hint">ทำ ก. วางแผน PM ให้ครบ ระบบจึงส่งคะแนนโมดูล 8</p>`}
         <ol class="recap">${X.items.map((it,k)=>`<li><b>${sim.pts[k]?"✓":"✗"} ${esc(it.item)}</b><span>${it.ok?"ผ่าน":"ต้องแก้ไข"} · ${esc(it.why)}</span></li>`).join("")}</ol>
         <div class="tools"><button class="primary" id="ps-a">ทำใหม่</button>${sim.res.done?"":`<button id="ps-p">ไป ก. วางแผน PM</button>`}</div>`);
       root.querySelector("#ps-a").onclick=()=>{ sim=null; simView(); };

@@ -11,7 +11,7 @@
   const pick=a=>a[Math.floor(Math.random()*a.length)];
   const r1=x=>Math.round(x*10)/10, fmt=n=>n.toLocaleString("th-TH",{maximumFractionDigits:2});
   const TABS=[["learn","บทเรียน"],["calc","ฝึกคำนวณ"],["set","ฝึกตั้งค่า"],["check","ตรวจก่อนใช้งาน"],["tech","มุมช่าง"]];
-  const MOD="7-การใช้งานสำหรับช่าง";
+  const MOD="6-การใช้งานสำหรับช่าง";
   let tab="learn", lesson=D.lessons[0].id;
 
   /* ---------- คะแนนรวม 2 ส่วน ---------- */

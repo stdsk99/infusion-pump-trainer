@@ -13,13 +13,14 @@
 
   /* ---------- เกณฑ์สำหรับใบรับรองในแอป (../js/cert.js เรียกใช้) ---------- */
   window.CertProgress=function(hist){
-    const read=new Set(); let sim=0, quiz=0;
+    const read=new Set(), mq=new Set(); let sim=0, quiz=0;
     hist.forEach(h=>{ const k=h.key||"", p=h.max?Math.round(h.score/h.max*100):0;
-      if(k.startsWith("read:")) read.add(k); if(k==="csim") sim=Math.max(sim,p); if(k==="quiz") quiz=Math.max(quiz,p); });
+      if(k.startsWith("read:")) read.add(k); if(k==="csim") sim=Math.max(sim,p); if(k==="quiz") quiz=Math.max(quiz,p); if(k.startsWith("mq:") && p>=80) mq.add(k); });
     const items=[
       {n:`อ่านบทเรียนครบ ${CR.readLessons} บท`, v:`${read.size}/${CR.readLessons}`, ok:read.size>=CR.readLessons},
       {n:`เครื่องจำลอง ≥ ${CR.simPct}%`, v:`ดีที่สุด ${sim}%`, ok:sim>=CR.simPct},
       {n:`แบบทดสอบ ≥ ${CR.quizPct}%`, v:`ดีที่สุด ${quiz}%`, ok:quiz>=CR.quizPct}];
+    if(CR.modTests) items.push({n:`ผ่านสอบท้ายบทครบ ${CR.modTests} บท`, v:`${mq.size}/${CR.modTests}`, ok:mq.size>=CR.modTests});
     return {items, pass:items.every(i=>i.ok), line:`บทเรียน ${read.size} บท  ·  เครื่องจำลอง ${sim}%  ·  แบบทดสอบ ${quiz}%`};
   };
 
@@ -46,18 +47,25 @@
     if(t==="warn") return `<div class="msg bad">⚠️ ${c}</div>`;
     return "";
   }
+  const G=()=>window.MGate;
+  const lockedL=id=>!!(G()&&G().locked(id));
   function lessons(){
+    if(lockedL(cur)) cur=L[Math.min(G().frontier(),L.length-1)].id;   // บทที่ยังล็อก: พากลับไปบทที่ต้องทำต่อ
     const root=document.getElementById("lessons"), X=L.find(x=>x.id===cur), i=L.indexOf(X), done=has("read:"+X.id);
     root.innerHTML=`<h1>บทเรียน</h1>
-      <p class="muted">อ่านแต่ละบทจนจบ แล้วกด "อ่านจบแล้ว" ต้องอ่านครบ ${CR.readLessons} บทจึงผ่านเกณฑ์ (อ่านแล้ว ${readCount()}/${L.length})</p>
+      <p class="muted">อ่านแต่ละบทจนจบ แล้วกด "อ่านจบแล้ว" ต้องอ่านครบ ${CR.readLessons} บทจึงผ่านเกณฑ์ (อ่านแล้ว ${readCount()}/${L.length}) · เรียนตามลำดับ: บทถัดไปเปิดเมื่อสอบท้ายบทผ่าน (5 ข้อ ได้ 4 ข้อขึ้นไป) เครื่องจำลองและแบบทดสอบเปิดเมื่อผ่านครบทุกบท</p>
       <div class="clgrid">
-        <nav class="clnav" aria-label="รายการบทเรียน">${L.map(x=>`<button data-l="${x.id}" class="${x.id===cur?"on":""}">${has("read:"+x.id)?"✓ ":""}${esc(x.n)}</button>`).join("")}</nav>
+        <nav class="clnav" aria-label="รายการบทเรียน">${L.map(x=>`<button data-l="${x.id}" class="${x.id===cur?"on":""}${lockedL(x.id)?" mlock":""}${G()&&G().passed(x.id)?" mdone":""}">${has("read:"+x.id)?"✓ ":""}${esc(x.n)}</button>`).join("")}</nav>
         <article class="lesson"><h2>${esc(X.n)}</h2>${X.b.map(block).join("")}
           <div class="srcs"><b>แหล่งอ้างอิง</b><ul>${X.src.map(([n,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul></div>
           <div class="tools">${done?`<span class="tp ok">✓ อ่านจบแล้ว</span>`:`<button class="primary" id="ls-done">อ่านจบแล้ว</button>`}
             ${i<L.length-1?`<button data-go="${L[i+1].id}">${esc(L[i+1].n)} ▶</button>`:`<a class="btn" href="#sim">ไปเครื่องจำลอง ▶</a>`}</div>
+          ${G()?G().boxHTML(X.id):""}
         </article></div>`;
-    root.querySelectorAll("[data-l],[data-go]").forEach(b=>b.onclick=()=>{ cur=b.dataset.l||b.dataset.go; lessons(); (window.innerWidth<900?root.querySelector(".lesson"):root).scrollIntoView({behavior:"smooth"}); });
+    root.querySelectorAll("[data-l],[data-go]").forEach(b=>b.onclick=()=>{ const id=b.dataset.l||b.dataset.go;
+      if(lockedL(id)){ G().toast(G().lockMsg(id)); return; }
+      cur=id; lessons(); (window.innerWidth<900?root.querySelector(".lesson"):root).scrollIntoView({behavior:"smooth"}); });
+    if(G()){ G().mount(root); G().decorate(); }
     const d=root.querySelector("#ls-done");
     if(d) d.onclick=async()=>{ d.disabled=true; await Score.record({key:"read:"+X.id, mod:"บทเรียน", item:X.n, score:1, max:1}); lessons(); };
   }
@@ -256,6 +264,7 @@
   /* ---------- นำทาง ---------- */
   function route(){
     const v=(location.hash||"#home").slice(1), names=[...document.querySelectorAll("#nav a")].map(a=>a.dataset.v), name=names.includes(v)?v:"home";
+    if(G() && G().locked(name)){ G().toast(G().lockMsg(name)); location.replace("#lessons"); return; }
     document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+name));
     document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("on",a.dataset.v===name));
     if(name==="home") home();
@@ -263,9 +272,14 @@
     if(name==="calc" && !document.getElementById("calc").innerHTML) calc();
     if(name==="sim" && !run) simIntro();
     if(window.Views && window.Views[name]) window.Views[name].show();
+    if(G()) G().decorate();
     window.scrollTo(0,0);
   }
   window.addEventListener("hashchange",route);
+  if(window.MGate){
+    MGate.goLesson=id=>{ if(id){ cur=id; lessons(); document.getElementById("lessons").scrollIntoView({behavior:"smooth"}); } else location.hash="#sim"; };
+    MGate.onChange=()=>{ document.querySelectorAll("#lessons .clnav [data-l]").forEach(b=>{ b.classList.toggle("mlock",lockedL(b.dataset.l)); b.classList.toggle("mdone",MGate.passed(b.dataset.l)); }); };
+  }
   window.addEventListener("DOMContentLoaded",()=>{
     const e=document.getElementById("report"); if(e&&C.reportEmail) e.innerHTML=`พบข้อผิดพลาดในเนื้อหา แจ้งได้ที่ <a href="mailto:${esc(C.reportEmail)}">${esc(C.reportEmail)}</a>`;
     route();

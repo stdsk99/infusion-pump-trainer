@@ -13,7 +13,7 @@
 <header>
   <div class="bar">
     <div class="logo">IP</div>
-    <div class="brand">Infusion Pump Repair Trainer<small>สื่อฝึกซ่อมเครื่องควบคุมการให้สารละลาย · 9 โมดูล</small></div>
+    <div class="brand">Infusion Pump Repair Trainer<small>สื่อฝึกซ่อมเครื่องควบคุมการให้สารละลาย · 8 โมดูล + สอบรวม</small></div>
   </div>
   <nav id="nav">
     <a href="#home" data-v="home">หน้าแรก</a>
@@ -22,10 +22,10 @@
     <a href="#repair" data-v="repair">3 · จำลองการซ่อม</a>
     <a href="#pm" data-v="pm">4 · ทดสอบ/PM</a>
     <a href="#order" data-v="order">5 · ลำดับขั้นตอน</a>
-    <a href="#quiz" data-v="quiz">6 · แบบทดสอบ</a>
-    <a href="#clin" data-v="clin">7 · การใช้งานสำหรับช่าง</a>
-    <a href="#accept" data-v="accept">8 · ตรวจรับเครื่อง</a>
-    <a href="#pmplan" data-v="pmplan">9 · PM ตามแผน</a>
+    <a href="#clin" data-v="clin">6 · การใช้งานสำหรับช่าง</a>
+    <a href="#accept" data-v="accept">7 · ตรวจรับเครื่อง</a>
+    <a href="#pmplan" data-v="pmplan">8 · PM ตามแผน</a>
+    <a href="#quiz" data-v="quiz">สอบรวม</a>
     <a href="#scores" data-v="scores">ผลของฉัน</a>
   </nav>
 </header>
@@ -35,16 +35,17 @@
 <section class="view" id="v-home">
   <h1>ฝึกวิเคราะห์และซ่อม Volumetric Infusion Pump</h1>
   <p class="muted">เครื่องในแอปนี้เป็น <b>เครื่องจำลองทั่วไป</b> ไม่ได้อิงยี่ห้อหรือรุ่นใด สร้างจากหลักการทำงานร่วมของ volumetric pump แบบ linear peristaltic ที่ใช้ในโรงพยาบาลทั่วไป</p>
+  <div class="note mqstrip" id="mq-strip"></div>
   <div class="cards">
     <a class="card" href="#principle"><div class="num">โมดูล 1</div><h3>หลักการทำงาน</h3><p>แตะชิ้นส่วนบนภาพตัดภายในเครื่องหรือ block diagram เพื่อดูหน้าที่ อาการเสียที่พบบ่อย และวิธีตรวจ</p></a>
     <a class="card" href="#alarms"><div class="num">โมดูล 2</div><h3>รหัส Alarm</h3><p>alarm ที่พบบ่อย 15 รายการ แยกสาเหตุจากผู้ใช้กับสาเหตุทางเทคนิค พร้อมลำดับการตรวจ</p></a>
     <a class="card" href="#repair"><div class="num">โมดูล 3</div><h3>จำลองการซ่อม</h3><p>8 เคสจากใบแจ้งซ่อม ตรวจหาสาเหตุ วินิจฉัย เลือกวิธีซ่อม และทดสอบก่อนส่งคืน พร้อมคะแนนและเฉลย</p></a>
     <a class="card" href="#pm"><div class="num">โมดูล 4</div><h3>การทดสอบหลังซ่อม / PM</h3><p>Flow accuracy, occlusion pressure, air detection, electrical safety (IEC 62353) พร้อมเครื่องคำนวณ โจทย์ฝึกตัดสินผล และแบบบันทึกผล</p></a>
     <a class="card" href="#order"><div class="num">โมดูล 5</div><h3>ลำดับขั้นตอน</h3><p>แตะเรียงขั้นตอนงานซ่อม การเปลี่ยนแบต การเปิดเครื่องทำความสะอาด และ PM ประจำปี พร้อมเหตุผลของแต่ละขั้น</p></a>
-    <a class="card" href="#quiz"><div class="num">โมดูล 6</div><h3>แบบทดสอบ</h3><p>สุ่ม 20 ข้อจากคลัง 37 ข้อ ส่งแล้วเห็นคะแนนแยกหมวดพร้อมเฉลย</p></a>
-    <a class="card" href="#clin"><div class="num">โมดูล 7</div><h3>การใช้งานสำหรับช่าง</h3><p>ใช้เครื่องเป็นเหมือนผู้ใช้ คำนวณอัตราไหล เมนูช่าง การไล่อากาศ ระบบตรวจอุดตัน drug library และมุมช่างแยก "ตั้งผิด" ออกจาก "เครื่องเสีย"</p></a>
-    <a class="card" href="#accept"><div class="num">โมดูล 8</div><h3>ตรวจรับเครื่อง</h3><p>6 ขั้นของการตรวจรับเครื่องใหม่ ทดสอบไฟฟ้าและสมรรถนะ แล้วฝึกตัดสิน รับ / รับแบบมีเงื่อนไข / ไม่รับ จาก 4 กรณี</p></a>
-    <a class="card" href="#pmplan"><div class="num">โมดูล 9</div><h3>PM ตามแผน</h3><p>ตั้งรอบ PM ตามความเสี่ยง วางแผนว่าเครื่องใดครบกำหนด แล้วทำ PM จำลองทีละรายการเทียบกับ baseline</p></a>
+    <a class="card" href="#clin"><div class="num">โมดูล 6</div><h3>การใช้งานสำหรับช่าง</h3><p>ใช้เครื่องเป็นเหมือนผู้ใช้ คำนวณอัตราไหล เมนูช่าง การไล่อากาศ ระบบตรวจอุดตัน drug library และมุมช่างแยก "ตั้งผิด" ออกจาก "เครื่องเสีย"</p></a>
+    <a class="card" href="#accept"><div class="num">โมดูล 7</div><h3>ตรวจรับเครื่อง</h3><p>6 ขั้นของการตรวจรับเครื่องใหม่ ทดสอบไฟฟ้าและสมรรถนะ แล้วฝึกตัดสิน รับ / รับแบบมีเงื่อนไข / ไม่รับ จาก 4 กรณี</p></a>
+    <a class="card" href="#pmplan"><div class="num">โมดูล 8</div><h3>PM ตามแผน</h3><p>ตั้งรอบ PM ตามความเสี่ยง วางแผนว่าเครื่องใดครบกำหนด แล้วทำ PM จำลองทีละรายการเทียบกับ baseline</p></a>
+    <a class="card" href="#quiz"><div class="num">หลังผ่านครบ 8 โมดูล</div><h3>สอบรวม</h3><p>สุ่ม 20 ข้อจากคลัง 37 ข้อ ส่งแล้วเห็นคะแนนแยกหมวดพร้อมเฉลย</p></a>
   </div>
   <div class="note"><b>ข้อควรทราบ:</b> สื่อนี้ใช้เพื่อการเรียนการสอนเท่านั้น ค่าตัวเลขและเกณฑ์เป็นค่าโดยทั่วไป การซ่อมเครื่องจริงต้องทำตาม service manual ของผู้ผลิตรุ่นนั้น โดยช่างที่ผ่านการอบรม และต้องทดสอบความปลอดภัยทุกครั้งก่อนนำเครื่องกลับไปใช้กับผู้ป่วย</div>
 </section>
@@ -241,16 +242,17 @@
     <aside class="panel ov-panel" id="ov-panel"></aside>
   </div>
   <div id="flow" hidden></div>
+  <div class="mq" data-mq="principle"></div>
 </section>
 
 <!-- REPAIR SIM -->
-<section class="view" id="v-repair"><div id="sim"></div></section>
-<section class="view" id="v-pm"><div id="pm"></div></section>
-<section class="view" id="v-order"><div id="order"></div></section>
+<section class="view" id="v-repair"><div id="sim"></div><div class="mq" data-mq="repair"></div></section>
+<section class="view" id="v-pm"><div id="pm"></div><div class="mq" data-mq="pm"></div></section>
+<section class="view" id="v-order"><div id="order"></div><div class="mq" data-mq="order"></div></section>
 <section class="view" id="v-quiz"><div id="quiz"></div></section>
-<section class="view" id="v-clin"><div id="clin"></div></section>
-<section class="view" id="v-accept"><div id="accept"></div></section>
-<section class="view" id="v-pmplan"><div id="pmplan"></div></section>
+<section class="view" id="v-clin"><div id="clin"></div><div class="mq" data-mq="clin"></div></section>
+<section class="view" id="v-accept"><div id="accept"></div><div class="mq" data-mq="accept"></div></section>
+<section class="view" id="v-pmplan"><div id="pmplan"></div><div class="mq" data-mq="pmplan"></div></section>
 <section class="view" id="v-scores"><div id="scores"></div></section>
 
 <!-- ALARMS -->
@@ -267,6 +269,7 @@
   <div class="legend"><span><b style="color:var(--warn)">สูง</b> หยุดให้สารละลายทันที</span><span><b style="color:var(--mid)">กลาง</b> ต้องแก้ไขเร็ว</span><span><b style="color:var(--low)">ต่ำ</b> แจ้งเตือน</span></div>
   <div id="alist"></div>
   <p class="muted" id="aempty" style="display:none;margin-top:14px">ไม่พบ alarm ที่ตรงกับคำค้น</p>
+  <div class="mq" data-mq="alarms"></div>
 </section>
 </main>
 
@@ -297,5 +300,7 @@
 <script src="js/clinical.js"></script>
 <script src="data/svc.js"></script>
 <script src="js/svc.js"></script>
+<script src="data/mquiz.js"></script>
+<script src="js/mgate.js"></script>
 </body>
 </html>

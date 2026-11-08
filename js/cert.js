@@ -8,7 +8,7 @@
   /* คำนวณความคืบหน้าจากประวัติคะแนน */
   function progress(hist){
     if(window.CertProgress) return window.CertProgress(hist, CR);   // แอปที่มีเกณฑ์แบบอื่น (เช่น วิชาคลินิก)
-    const learn=new Set(), exam={}, order=new Set(); let quiz=0, clin=0, acc=0, pm=0;
+    const learn=new Set(), exam={}, order=new Set(), mq=new Set(); let quiz=0, clin=0, acc=0, pm=0;
     hist.forEach(h=>{ const k=h.key||"";
       if(k.startsWith("learn:")) learn.add(k);
       if(k.startsWith("exam:")) exam[k]=Math.max(exam[k]||0, +h.score);
@@ -17,6 +17,7 @@
       if(k==="clin:sim" && h.max) clin=Math.max(clin, Math.round(h.score/h.max*100));
       if(k==="accept" && h.max) acc=Math.max(acc, Math.round(h.score/h.max*100));
       if(k==="pmplan" && h.max) pm=Math.max(pm, Math.round(h.score/h.max*100));
+      if(k.startsWith("mq:") && h.max && h.score/h.max>=0.8) mq.add(k);
     });
     const ev=Object.values(exam), avg=ev.length?Math.round(ev.reduce((a,b)=>a+b,0)/ev.length):0;
     const items=[
@@ -28,6 +29,7 @@
     if(CR.clinSimPct) items.push({n:`การใช้งานสำหรับช่าง (ฝึกตั้งค่า + มุมช่าง) ≥ ${CR.clinSimPct}%`, v:`ดีที่สุด ${clin}%`, ok:clin>=CR.clinSimPct});
     if(CR.acceptPct) items.push({n:`ตรวจรับเครื่อง ≥ ${CR.acceptPct}%`, v:`ดีที่สุด ${acc}%`, ok:acc>=CR.acceptPct});
     if(CR.pmPct) items.push({n:`PM ตามแผน ≥ ${CR.pmPct}%`, v:`ดีที่สุด ${pm}%`, ok:pm>=CR.pmPct});
+    if(CR.modTests) items.push({n:`ผ่านสอบท้ายโมดูลครบ ${CR.modTests} โมดูล`, v:`${mq.size}/${CR.modTests}`, ok:mq.size>=CR.modTests});
     return {items, pass:items.every(i=>i.ok), learn:learn.size, examN:ev.length, avg, quiz, order:order.size, clin, acc, pm};
   }
 
