@@ -14,7 +14,7 @@
   }
 
   function start(){
-    const qs=shuffle(Q.bank).slice(0,Math.min(Q.perTest,Q.bank.length)).map(b=>{
+    const qs=(window.QPick?QPick.pick("quiz",Q.bank,Q.perTest):shuffle(Q.bank).slice(0,Math.min(Q.perTest,Q.bank.length))).map(b=>{
       const ord=shuffle(b.o.map((t,k)=>k)); return {...b, ord, ans:ord.indexOf(0), pick:null};});
     let i=0;
     function draw(){
@@ -41,7 +41,7 @@
   function result(qs){
     const ok=qs.filter(q=>q.pick===q.ans).length, n=qs.length, pct=Math.round(ok/n*100);
     const byCat={}; qs.forEach(q=>{byCat[q.t]=byCat[q.t]||[0,0]; byCat[q.t][1]++; if(q.pick===q.ans) byCat[q.t][0]++;});
-    window.Score&&Score.record({key:"quiz", mod:(window.APP_CONFIG||{}).quizMod||"9-สอบรวม", item:"แบบทดสอบ "+n+" ข้อ", score:ok, max:n, detail:Object.entries(byCat).map(([k,v])=>k+" "+v[0]+"/"+v[1]).join(", ")});
+    window.Score&&Score.record({key:"quiz", mod:(window.APP_CONFIG||{}).quizMod||"9-สอบรวม", item:"แบบทดสอบ "+n+" ข้อ", score:ok, max:n, detail:Object.entries(byCat).map(([k,v])=>k+" "+v[0]+"/"+v[1]).join(", "), q:window.QPick?QPick.ids(qs):""});
     root.innerHTML=`<h1>ผลแบบทดสอบ</h1>
       <div class="score ${pct>=80?"ok":pct>=60?"mid":"bad"}"><div class="big">${ok}/${n}</div><div>${pct}%</div></div>
       <div class="sumrow">${Object.entries(byCat).map(([k,v])=>`<div><small>${esc(k)}</small><b>${v[0]}/${v[1]}</b></div>`).join("")}</div>

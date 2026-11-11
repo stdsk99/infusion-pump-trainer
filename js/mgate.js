@@ -75,7 +75,7 @@
       if(!sn.ok){ el.innerHTML=head+Seen.gateHTML(id); return; }
       el.innerHTML=head+`<p class="small muted">สุ่ม ${take} ข้อจากคลัง ${M.qs.length} ข้อ ต้องได้อย่างน้อย ${needOf(id)} ข้อ${needOf(id)>=take?" (ถูกทุกข้อ)":""}จึงผ่าน${next?` และเปิด${label}ถัดไป`:""} สอบซ้ำได้ไม่จำกัด แต่ละรอบได้ข้อไม่เหมือนกัน</p>
         <div class="tools"><button class="primary mq-go">${b?"สอบอีกครั้ง":"เริ่มสอบ"}</button>${ok&&next?`<a class="btn" href="${nextHref(next)}">ไป${label}ถัดไป →</a>`:""}</div>`;
-      el.querySelector(".mq-go").onclick=()=>{ S.qs=shuffle(M.qs).slice(0,take).map(q=>({q,ord:shuffle(q.o.map((x,k)=>k))})); S.ans={}; S.res=null; render(el); };
+      el.querySelector(".mq-go").onclick=()=>{ S.qs=(window.QPick?QPick.pick("mq:"+id,M.qs,take):shuffle(M.qs).slice(0,take)).map(q=>({q,ord:shuffle(q.o.map((x,k)=>k))})); S.ans={}; S.res=null; render(el); };
       wireNext(el); return;
     }
     const done=!!S.res;
@@ -90,7 +90,7 @@
     if(send) send.onclick=async()=>{
       send.disabled=true; send.textContent="กำลังบันทึก…";
       const sc=S.qs.filter((x,k)=>S.ans[k]===0).length; S.res={sc};
-      if(window.Score) await Score.record({key:"mq:"+id, mod:"สอบท้าย"+label, item:M.n, score:sc, max:take, detail:sc>=needOf(id)?"ผ่าน":"ไม่ผ่าน"});
+      if(window.Score) await Score.record({key:"mq:"+id, mod:"สอบท้าย"+label, item:M.n, score:sc, max:take, detail:sc>=needOf(id)?"ผ่าน":"ไม่ผ่าน", q:window.QPick?QPick.ids(S.qs.map(x=>x.q)):""});
       render(el); decorate(); if(window.MGate.onChange) window.MGate.onChange(id);
       el.scrollIntoView({behavior:"smooth",block:"start"});
     };
