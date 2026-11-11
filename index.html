@@ -55,7 +55,7 @@
   <h1>หลักการทำงาน</h1>
   <p class="muted">เริ่มจาก “ภาพรวม” เพื่อดูว่าเครื่องทั้งเครื่องทำงานอย่างไร แล้วไปที่ “ภาพตัดภายใน” แตะชิ้นส่วนเพื่อดูรายละเอียด กด “เดินเครื่อง” เพื่อดูกลไกทำงาน หรือเลือก “เส้นทางสัญญาณ” เพื่อดูว่าคำสั่งและสัญญาณวิ่งไปทางไหน</p>
   <div class="tools">
-    <div class="seg"><button id="bt-ov" class="on">ภาพรวม</button><button id="bt-cut">ภาพตัดภายใน</button><button id="bt-blk">Block diagram</button><button id="bt-flow">เส้นทางสัญญาณ</button></div>
+    <div class="seg"><button id="bt-ov" class="on">ภาพรวม</button><button id="bt-cut">ภาพตัดภายใน</button><button id="bt-blk" data-seen="principle|fig-blk">Block diagram</button><button id="bt-flow" data-seen="principle|fig-flow">เส้นทางสัญญาณ</button></div>
     <button id="bt-run">▶ เดินเครื่อง</button>
   </div>
   <div class="layout">
@@ -276,6 +276,7 @@
 <footer>สื่อการสอนวิชาเครื่องมือแพทย์ · เนื้อหาและภาพทั้งหมดจัดทำขึ้นใหม่เพื่อการศึกษา ไม่ได้คัดลอกจากคู่มือของผู้ผลิตรายใด · เครื่องในแอปเป็นเครื่องจำลอง ไม่ใช่ผลิตภัณฑ์จริง</footer>
 
 <script src="data/config.js"></script>
+<script src="js/seen.js"></script>
 <script src="data/parts.js"></script>
 <script src="data/alarms.js"></script>
 <script src="data/cases.js"></script>
@@ -301,6 +302,7 @@
 <script src="data/svc.js"></script>
 <script src="js/svc.js"></script>
 <script src="data/mquiz.js"></script>
+<script src="js/seen-topics.js"></script>
 <script src="js/mgate.js"></script>
 </body>
 </html>

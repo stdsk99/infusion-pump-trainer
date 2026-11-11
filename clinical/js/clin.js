@@ -65,9 +65,16 @@
     root.querySelectorAll("[data-l],[data-go]").forEach(b=>b.onclick=()=>{ const id=b.dataset.l||b.dataset.go;
       if(lockedL(id)){ G().toast(G().lockMsg(id)); return; }
       cur=id; lessons(); (window.innerWidth<900?root.querySelector(".lesson"):root).scrollIntoView({behavior:"smooth"}); });
+    /* ต้องเปิดหัวข้อย่อยครบ (บทที่ไม่มีหัวข้อย่อย: ต้องกด "อ่านจบแล้ว") ก่อนทำสอบท้ายบท (../js/seen.js) */
+    if(window.Seen){
+      const lid=X.id, ns=Seen.sectionize(root.querySelector("article.lesson"), lid);
+      Seen.define(lid, ()=>ns?Seen.fromDom(lid):[{id:"read", n:"อ่านจนจบแล้วกด “อ่านจบแล้ว”"}],
+        id=>{ const el=id==="read"?root.querySelector("#ls-done"):root.querySelector(`details[data-seen="${lid}|${id}"]`); if(el){ if(el.tagName==="DETAILS") el.open=true; el.scrollIntoView({behavior:"smooth",block:"center"}); } });
+      if(!ns && done) Seen.mark(lid,"read");
+    }
     if(G()){ G().mount(root); G().decorate(); }
     const d=root.querySelector("#ls-done");
-    if(d) d.onclick=async()=>{ d.disabled=true; await Score.record({key:"read:"+X.id, mod:"บทเรียน", item:X.n, score:1, max:1}); lessons(); };
+    if(d) d.onclick=async()=>{ d.disabled=true; if(window.Seen) Seen.mark(X.id,"read"); await Score.record({key:"read:"+X.id, mod:"บทเรียน", item:X.n, score:1, max:1}); lessons(); };
   }
 
   /* ---------- ฝึกคำนวณ (สุ่มโจทย์ ไม่นับเกณฑ์) ---------- */

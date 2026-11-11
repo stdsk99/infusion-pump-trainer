@@ -60,11 +60,12 @@
   function viewLearn(){
     const L=D.lessons.find(x=>x.id===lesson), i=D.lessons.indexOf(L);
     frame(`<div class="clgrid">
-      <nav class="clnav">${D.lessons.map(x=>`<button data-l="${x.id}" class="${x.id===lesson?"on":""}">${esc(x.n)}</button>`).join("")}</nav>
+      <nav class="clnav">${D.lessons.map(x=>`<button data-l="${x.id}" data-seen="clin|${x.id}" class="${x.id===lesson?"on":""}">${esc(x.n)}</button>`).join("")}</nav>
       <article class="lesson"><h2>${esc(L.n)}</h2>${L.b.map(block).join("")}
         <div class="tools">${i>0?`<button data-go="${D.lessons[i-1].id}">◀ ${esc(D.lessons[i-1].n)}</button>`:""}
         ${i<D.lessons.length-1?`<button class="primary" data-go="${D.lessons[i+1].id}">${esc(D.lessons[i+1].n)} ▶</button>`:`<button class="primary" data-tab="set">ไปฝึกตั้งค่า ▶</button>`}</div>
       </article></div>`);
+    if(window.Seen) Seen.mark("clin", lesson, root);
     root.querySelectorAll("[data-l],[data-go]").forEach(b=>b.onclick=()=>{lesson=b.dataset.l||b.dataset.go;render();if(window.innerWidth<900)root.querySelector(".lesson").scrollIntoView({behavior:"smooth"});});
     const t=root.querySelector("[data-tab]"); if(t) t.onclick=()=>{tab="set";render();window.scrollTo(0,0);};
   }

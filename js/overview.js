@@ -9,7 +9,8 @@
   function hi(ids){
     document.querySelectorAll("#svg-cut .part").forEach(p=>p.classList.toggle("sel", (ids||[]).includes(p.dataset.id)));
   }
-  const sec = (title, body, open) => `<details class="ov-sec"${open?" open":""}><summary>${esc(title)}</summary><div class="ov-body">${body}</div></details>`;
+  let secN=0;
+  const sec = (title, body, open) => `<details class="ov-sec" data-seen="principle|o${secN++}"${open?" open":""}><summary>${esc(title)}</summary><div class="ov-body">${body}</div></details>`;
 
   const path = `<div class="ov-path">${O.path.map((n,i)=>
     `${i?'<span class="ov-arr" aria-hidden="true">→</span>':""}<button type="button" class="ov-node${n.ids.length?"":" end"}" data-ids="${n.ids.join(" ")}"${n.ids.length?"":" disabled"}>${esc(n.t)}</button>`).join("")}</div>

@@ -31,13 +31,14 @@ const priTh = {h:"สูง",m:"กลาง",l:"ต่ำ"};
 /* component panel */
 const panel=document.getElementById("panel");
 const chips=document.getElementById("chips");
-Object.entries(P).forEach(([id,o])=>{const b=document.createElement("button");b.textContent=o.n;b.onclick=()=>select(id,true);chips.append(b);});
+Object.entries(P).forEach(([id,o])=>{const b=document.createElement("button");b.textContent=o.n;b.dataset.seen="principle|p-"+id;b.onclick=()=>select(id,true);chips.append(b);});
 const chipHTML=chips.outerHTML;
 function esc(s){return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
 function select(id,scroll){
+  if(window.Seen) Seen.mark("principle", "p-"+id, document.getElementById("panel"));
   document.querySelectorAll(".part").forEach(p=>p.classList.toggle("sel",p.dataset.id===id));
   const o=P[id]; if(!o) return;
-  const al=o.a.map(a=>`<a class="pill" href="#alarms" data-al="${a}">${esc(AN[a].n)}</a>`).join("");
+  const al=o.a.filter(a=>AN[a]).map(a=>`<a class="pill" href="#alarms" data-al="${a}">${esc(AN[a].n)}</a>`).join("");
   panel.innerHTML=`<div class="en">${esc(o.n)}</div><h2>${esc(o.th)}</h2>
     <h3>หน้าที่</h3><p>${esc(o.f)}</p>
     <h3>หลักการทำงาน</h3><p>${esc(o.h)}</p>
@@ -62,6 +63,7 @@ btBlk.onclick=()=>fig("blk");
 btFlow.onclick=()=>fig("flow");
 function fig(w){
   curFig=w;
+  if(window.Seen && w!=="ov") Seen.mark("principle", "fig-"+w, document.getElementById("v-principle"));
   [btOv,btCut,btBlk,btFlow].forEach(b=>b.classList.toggle("on",b.id==="bt-"+w));
   document.getElementById("fig-cut").style.display=(w==="cut"||w==="ov")?"":"none";
   document.getElementById("panel").hidden=w==="ov";
@@ -84,7 +86,7 @@ function renderAlarms(){
   const q=document.getElementById("q").value.trim().toLowerCase();
   let n=0;
   alist.innerHTML=A.filter(a=>(pf==="all"||a.p===pf)&&(!q||(a.n+a.th+a.u.join()+a.t.join()+(a.r?P[a.r].n:"")).toLowerCase().includes(q))).map(a=>{n++;
-    return `<details class="alarm" id="al-${a.id}"${openAlarm===a.id?" open":""}><summary><span class="pri ${a.p}">${priTh[a.p]}</span><span class="t">${esc(a.n)}<small>${esc(a.th)}</small></span></summary>
+    return `<details class="alarm" id="al-${a.id}" data-seen="alarms|${a.id}"${openAlarm===a.id?" open":""}><summary><span class="pri ${a.p}">${priTh[a.p]}</span><span class="t">${esc(a.n)}<small>${esc(a.th)}</small></span></summary>
     <div class="body">
       ${a.u.length?`<h4>สาเหตุจากการใช้งาน</h4><ul>${li(a.u)}</ul>`:""}
       ${a.t.length?`<h4>สาเหตุทางเทคนิค</h4><ul>${li(a.t)}</ul>`:""}

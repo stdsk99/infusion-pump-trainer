@@ -54,11 +54,11 @@
       root.innerHTML=`<h1>ตรวจรับเครื่อง (acceptance testing)</h1>
         <p class="muted">${esc(D.intro)}</p>
         ${statusBar("accept",PCT)}
-        <div class="chips pmtabs"><button data-t="learn" class="${tab==="learn"?"on":""}">บทเรียน</button><button data-t="ex" class="${tab==="ex"?"on":""}">ใบตรวจรับจำลอง</button></div>
+        <div class="chips pmtabs"><button data-t="learn" data-seen="accept|accept-learn" class="${tab==="learn"?"on":""}">บทเรียน</button><button data-t="ex" class="${tab==="ex"?"on":""}">ใบตรวจรับจำลอง</button></div>
         <div id="ac-body">${body}</div>`;
       root.querySelectorAll(".pmtabs [data-t]").forEach(b=>b.onclick=()=>{ tab=b.dataset.t; render(); window.scrollTo(0,0); });
     }
-    function learn(){ frame(`<article class="lesson">${D.learn.map(block).join("")}
+    function learn(){ if(window.Seen) Seen.mark("accept","accept-learn", root); frame(`<article class="lesson">${D.learn.map(block).join("")}
       <div class="srcs"><b>แหล่งอ้างอิง</b><ul>${D.src.map(([n,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul></div>
       <div class="tools"><button class="primary" id="ac-go">ไปใบตรวจรับจำลอง ▶</button></div></article>`);
       root.querySelector("#ac-go").onclick=()=>{ tab="ex"; render(); window.scrollTo(0,0); }; }
@@ -118,11 +118,11 @@
       root.innerHTML=`<h1>PM ตามแผน (inspection and preventive maintenance)</h1>
         <p class="muted">${esc(D.intro)}</p>
         ${statusBar("pmplan",PCT)}${partBar()}
-        <div class="chips pmtabs"><button data-t="learn" class="${tab==="learn"?"on":""}">บทเรียน</button><button data-t="plan" class="${tab==="plan"?"on":""}">ก. วางแผน PM</button><button data-t="sim" class="${tab==="sim"?"on":""}">ข. ทำ PM จำลอง</button></div>
+        <div class="chips pmtabs"><button data-t="learn" data-seen="pmplan|pm-learn" class="${tab==="learn"?"on":""}">บทเรียน</button><button data-t="plan" class="${tab==="plan"?"on":""}">ก. วางแผน PM</button><button data-t="sim" class="${tab==="sim"?"on":""}">ข. ทำ PM จำลอง</button></div>
         <div id="pm9-body">${body}</div>`;
       root.querySelectorAll(".pmtabs [data-t]").forEach(b=>b.onclick=()=>{ tab=b.dataset.t; render(); window.scrollTo(0,0); });
     }
-    function learn(){ frame(`<article class="lesson">${D.learn.map(block).join("")}
+    function learn(){ if(window.Seen) Seen.mark("pmplan","pm-learn", root); frame(`<article class="lesson">${D.learn.map(block).join("")}
       <div class="srcs"><b>แหล่งอ้างอิง</b><ul>${D.src.map(([n,u])=>`<li><a href="${esc(u)}" target="_blank" rel="noopener">${esc(n)}</a></li>`).join("")}</ul></div>
       <div class="tools"><button class="primary" id="pm-go">ไป ก. วางแผน PM ▶</button></div></article>`);
       root.querySelector("#pm-go").onclick=()=>{ tab="plan"; render(); window.scrollTo(0,0); }; }
