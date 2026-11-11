@@ -34,6 +34,7 @@
   /* ---------- บทเรียน ---------- */
   let cur=L[0].id;
   function block([t,c]){
+    if(t==="sec") return `<h3 class="lsec">${c}</h3>`;
     if(t==="p") return `<p>${c}</p>`;
     if(t==="ul") return `<ul>${c.map(x=>`<li>${x}</li>`).join("")}</ul>`;
     if(t==="ol") return `<ol>${c.map(x=>`<li>${x}</li>`).join("")}</ol>`;
