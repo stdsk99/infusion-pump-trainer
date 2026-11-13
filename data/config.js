@@ -7,6 +7,7 @@
 */
 window.APP_CONFIG = {
   app: "pump",
+  store: "ipt",   // คำนำหน้าคีย์ localStorage ของวิชานี้ (ห้ามซ้ำกับวิชาอื่น ต้องอยู่ใน STORES ของ medtechcenter/js/api.js)
   appName: "Infusion Pump Repair Trainer",
   portal: "/medtechcenter/",   // ที่อยู่เว็บหลัก (โดเมนเดียวกัน) สมัคร/เข้าสู่ระบบ/เปลี่ยนรหัสผ่านทำที่นี่ที่เดียว
   sheetUrl: "https://script.google.com/macros/s/AKfycbzLcs08L6W0fnHHZ5tCq8JjkXFPcux3G3_WT1t3vUC8zSo-oQKoACC3xHc67-h-yy6KTw/exec",
@@ -22,7 +23,8 @@ window.APP_CONFIG = {
     title: "การฝึกซ่อมและทดสอบเครื่องควบคุมการให้สารละลาย (Infusion Pump)",
     subject: "ของศูนย์การเรียนรู้เทคโนโลยีทางการแพทย์",
     signer: "รศ.ดร.ณัฐดนัย สิงห์คลีวรรณ",
-    signerPos: "ผู้จัดทำสื่อการเรียนรู้"
+    signerPos: "ผู้จัดทำสื่อการเรียนรู้",
+    ref: "IPT"
   },
 
   /* เกณฑ์ผ่าน (ต้องตรงกับ CRIT ใน apps-script/Code.gs) */
